@@ -122,6 +122,8 @@ class BinaryTreeByArray():
         self.print_bt()
         print self.level_order()
         print self.pre_order()
+        print self.in_order()
+        print self.post_order()
 
 if __name__ == '__main__':
     bt = BinaryTreeByArray()

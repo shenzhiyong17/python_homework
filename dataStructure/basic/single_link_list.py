@@ -14,7 +14,7 @@ class LinkList():
         self.head = Node()
 
     def is_empty(self):
-        return self.head.next == None and self.head.key == None
+        return self.head.next is None and self.head.key is None
 
     def is_tail(self, node):
         return node.next == None

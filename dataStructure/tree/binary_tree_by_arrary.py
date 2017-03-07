@@ -6,7 +6,6 @@ import copy
 
 from dataStructure.common.gen_rand import *
 
-
 class Node():
     def __init__(self, key=None):
         self.key = key

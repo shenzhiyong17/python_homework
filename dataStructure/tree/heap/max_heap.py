@@ -122,3 +122,6 @@ class Heapify(CompletelyTree):
 if __name__ == '__main__':
     bt = MaxHeap()
     bt.test()
+
+    bt = Heapify()
+    bt.test()

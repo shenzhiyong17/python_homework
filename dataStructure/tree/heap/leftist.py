@@ -4,20 +4,13 @@
 
 from dataStructure.common.gen_rand import gen_rand_list
 from dataStructure.tree.binary_tree_by_linklist import BinaryTreeByLinkList
-
-
-class Node():
-    key = None
-    left = None
-    right = None
-    shortest = 1
-
-    def __init__(self, key=None):
-        self.key = key
-
+import dataStructure.common.node as BasicNode
 
 class Leftist(BinaryTreeByLinkList):
     # 最小左高树，最小树，左子树最小深度大于右子树最小深度，page 284
+
+    class Node(BasicNode.Node):
+        shortest = 1
 
     def union(self, a, b):
         # 合并两颗最小左高树
@@ -45,21 +38,24 @@ class Leftist(BinaryTreeByLinkList):
         return a
 
     def insert(self, key):
-        self.root = self.union(self.root, Node(key))
+        self.root = self.union(self.root, self.Node(key))
 
     def delete(self, node):
         node = self.union(node.left, node.right)
         return node
 
+    def test(self):
+        rand = gen_rand_list(10, 1, 99)
+        # rand = [97, 56, 59, 94, 13]
+        print rand
+        self.root = self.Node(rand.pop(0))
+        for i in rand:
+            self.insert(i)
+        self.print_tree()
+        print '====================================='
+        self.root.left = self.delete(self.root.left)
+        self.print_tree()
 
 if __name__ == '__main__':
-    leftist = Leftist(Node(5))
-    rand = gen_rand_list(10, 1, 99)
-    # rand = [97, 56, 59, 94, 13]
-    print rand
-    for i in rand:
-        leftist.insert(i)
-    leftist.print_tree()
-    print '====================================='
-    leftist.root.left = leftist.delete(leftist.root.left)
-    leftist.print_tree()
+    leftist = Leftist()
+    leftist.test()

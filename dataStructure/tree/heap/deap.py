@@ -6,11 +6,12 @@ import math
 
 from dataStructure.tree.completely_tree import *
 
+# 去掉数组二叉树中 max 字段后引出问题未解
 
 class Deap(CompletelyTree):
     ## 双端堆，左子树为最小堆，右子树为最大堆,根为空
     def __init__(self, max=100):
-        CompletelyTree.__init__(self, max)
+        CompletelyTree.__init__(self)
         self.b_tree[1] = Node(' ')
 
     def max_heap(self, index):

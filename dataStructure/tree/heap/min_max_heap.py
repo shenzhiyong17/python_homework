@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 # date: 2016-2-14
 
+# 去掉数组二叉树中 max 字段后引出问题未解
+
 from dataStructure.tree.completely_tree import *
 
 
@@ -83,8 +85,9 @@ class MinMaxHeap(CompletelyTree):
             return res
 
     def insert(self, key):
-        index = self.len() + 1
-        parent = self.parent(index)
+        self.b_tree.append(Node(key))
+        index = self.len()
+        parent = self.b_tree[index / 2]
         if not parent:
             self.b_tree[1] = Node(key)
         else:
@@ -159,7 +162,7 @@ class MinMaxHeap(CompletelyTree):
 
 
 if __name__ == '__main__':
-    bt = MinMaxHeap(100)
+    bt = MinMaxHeap()
     # rand = [44,88,89,87]
     rand = gen_rand_list(10, 1, 99)
     for i in rand:

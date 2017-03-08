@@ -7,12 +7,16 @@ from dataStructure.common.test_data import rand
 
 
 class CompletelyTree(BinaryTreeByArray):
+    # b_tree[0] 为空，index 从1开始
     def __init__(self):
         # 满二叉树没用空元素，不用设置None占位，不用设置max值
         self.b_tree = [None, ]
 
     def len(self):
         return len(self.b_tree)
+
+    def is_in(self, index):
+        return index < self.len() - 1
 
     def modify(self, key, index):
         if index > 1 and index < self.len():
@@ -26,6 +30,7 @@ class CompletelyTree(BinaryTreeByArray):
         return self.b_tree.pop()
 
     def test(self):
+        print rand
         for i in rand:
             self.append(Node(i))
         self.modify('ss', 5)

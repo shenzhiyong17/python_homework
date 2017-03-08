@@ -4,4 +4,4 @@
 
 from dataStructure.common import gen_rand
 
-rand = gen_rand.gen_rand_list(10, 1, 99)
+rand = gen_rand.gen_rand_list(20, 1, 99)

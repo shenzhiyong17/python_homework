@@ -69,7 +69,6 @@ class IntTrie(BinaryTreeByLinkList):
         for i in rand:
             self.insert(i, i)
             # self.insert2(self.root, i, i)
-        print '==============================================='
         self.print_tree()
         print self.search(5)
 

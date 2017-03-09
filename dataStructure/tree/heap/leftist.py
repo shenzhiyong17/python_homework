@@ -52,7 +52,6 @@ class Leftist(BinaryTreeByLinkList):
         for i in rand:
             self.insert(i)
         self.print_tree()
-        print '====================================='
         self.root.left = self.delete(self.root.left)
         self.print_tree()
 

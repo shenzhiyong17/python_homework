@@ -122,8 +122,6 @@ class IntPatricia(BinaryTreeByLinkList):
         for i in rand:
             self.insert(i, i)
             # self.print_tree()
-            # print '=============='
-        print '==============================================='
         self.print_tree()
         x = 13
         if x in rand:

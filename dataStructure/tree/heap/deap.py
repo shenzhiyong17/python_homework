@@ -7,8 +7,6 @@ import math
 from dataStructure.tree.completely_tree import *
 
 
-# 去掉数组二叉树中 max 字段后引出问题未解
-
 class Deap(CompletelyTree):
     # 双端堆，左子树为最小堆，右子树为最大堆，根为空
     # i是左子树节点，j是右子树对应节点，如果j为空，则j为i的父节点的对应节点，且 i < j
@@ -159,10 +157,8 @@ class Deap(CompletelyTree):
         for v in rand:
             self.append(v)
         self.print_bt()
-        print '-------------------'
         print 'delete_min: %s' % self.delete_min()
         self.print_bt()
-        print '-------------------'
         print 'delete_max: %s' % self.delete_max()
         self.print_bt()
 

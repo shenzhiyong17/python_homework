@@ -51,10 +51,8 @@ class MaxHeap(CompletelyTree):
             # print '-----'
 
         print self.pop().key
-        print '==============================='
         self.print_bt()
         print self.pop().key
-        print '==============================='
         self.print_bt()
 
 
@@ -114,7 +112,6 @@ class Heapify(CompletelyTree):
         print ''
         self.print_bt()
         for i in range(3):
-            print '====='
             print self.pop()
             self.print_bt()
 

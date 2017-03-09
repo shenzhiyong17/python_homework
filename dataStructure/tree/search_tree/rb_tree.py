@@ -178,7 +178,6 @@ class RBTree(BinaryTreeByLinkList):
         for i in rand:
             self.insert(i)
         pre = self.pre_order(self.root)
-        print '==============================================='
         self.print_tree()
 
 if __name__ == '__main__':

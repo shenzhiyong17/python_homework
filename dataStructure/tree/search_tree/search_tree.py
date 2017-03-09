@@ -139,7 +139,6 @@ class SearchTree(BinaryTreeByLinkList):
         for i in rand:
             self.insert(i)
         self.print_tree()
-        print '==============================================='
         self.delete(rand[4])
         self.print_tree()
 

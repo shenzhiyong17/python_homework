@@ -13,8 +13,10 @@ import dataStructure.tree.search_tree.avl as AVL
 import dataStructure.tree.search_tree.rb_tree as RBTree
 import dataStructure.tree.search_tree.search_tree as SearchTree
 import dataStructure.tree.threaded_tree as ThreadTree
+import dataStructure.tree.heap.deap as Deap
 import dataStructure.tree.heap.max_heap as MaxHeap
 import dataStructure.tree.heap.leftist as Leftist
+import dataStructure.tree.heap.min_max_heap as MinMaxHeap
 
 
 class TestCase(unittest.TestCase):
@@ -59,6 +61,10 @@ class TestCase(unittest.TestCase):
         tree = IntPatricia.IntPatricia()
         tree.test()
 
+    def test_deap(self):
+        heap = Deap.Deap()
+        heap.test()
+
     def test_maxheap(self):
         heap = MaxHeap.MaxHeap()
         heap.test()
@@ -69,6 +75,10 @@ class TestCase(unittest.TestCase):
 
     def test_leftist(self):
         heap = Leftist.Leftist()
+        heap.test()
+
+    def test_min_max_heap(self):
+        heap = MinMaxHeap.MinMaxHeap()
         heap.test()
 
 if __name__ == "__main__":

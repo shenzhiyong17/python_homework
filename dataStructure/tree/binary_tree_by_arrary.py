@@ -13,6 +13,9 @@ class Node():
     def __str__(self):
         return '%s' % self.key
 
+    def __cmp__(self, other):
+        return cmp(self.key, other.key)
+
 class BinaryTreeByArray():
     def __init__(self, max=100):
         self.max = max
@@ -76,11 +79,11 @@ class BinaryTreeByArray():
         queue.append(self.b_tree[index])
         while len(queue) > 0:
             node = queue.pop(0)
-            index = self.b_tree.index(node)
-            if node:
+            if node is not None:
                 res.append(node.key)
                 queue.append(self.left(index))
                 queue.append(self.right(index))
+            index += 1
         return res
 
     def print_bt(self):
@@ -114,6 +117,7 @@ class BinaryTreeByArray():
                     node = Node('-')
             print '\n'
             tabs /= 2
+        print '==============================='
 
     def test(self):
         for i in range(15):

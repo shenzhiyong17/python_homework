@@ -76,7 +76,7 @@ class BinaryTreeByLinkList():
                 length -= 1
                 index += 1
                 if index >= len(tree_list):
-                    print '\n'
+                    print '\n================================'
                     return
                 node = tree_list[index]
                 if not node:
@@ -84,6 +84,7 @@ class BinaryTreeByLinkList():
                 j += 1
             print '\n'
             tabs /= 2
+        print '================================'
 
 
 if __name__ == '__main__':

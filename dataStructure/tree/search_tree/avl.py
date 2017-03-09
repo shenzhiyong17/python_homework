@@ -123,7 +123,6 @@ class AVL(BinaryTreeByLinkList):
         print rand
         for i in rand:
             self.root = self.insert(self.root, i)
-        print '==============================================='
         self.print_tree()
 
 

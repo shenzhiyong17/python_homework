@@ -156,11 +156,11 @@ class Deap(CompletelyTree):
         print rand
         for v in rand:
             self.append(v)
-        self.print_bt()
+        self.print_tree()
         print 'delete_min: %s' % self.delete_min()
-        self.print_bt()
+        self.print_tree()
         print 'delete_max: %s' % self.delete_max()
-        self.print_bt()
+        self.print_tree()
 
 
 if __name__ == '__main__':

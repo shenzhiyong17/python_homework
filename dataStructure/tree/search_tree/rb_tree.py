@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 # date: 2017-1-18
 
-import dataStructure.common.node as BasicNode
+import dataStructure.tree.node as BasicNode
+import dataStructure.tree.node
 from common.Enum import Enum
 from dataStructure.common.test_data import rand
 from dataStructure.tree.binary_tree_by_linklist import BinaryTreeByLinkList
@@ -21,7 +22,7 @@ class RBTree(BinaryTreeByLinkList):
     class Node(BasicNode.Node):
 
         def __init__(self, key=None, parent=None):
-            BasicNode.Node.__init__(self, key)
+            dataStructure.tree.node.Node.__init__(self, key)
             self.color = Color.BLACK
             self.parent = parent
 

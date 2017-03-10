@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 # date: 2017-1-24
 
-import dataStructure.common.node as BasicNode
+import dataStructure.tree.node as BasicNode
+import dataStructure.tree.node
 from dataStructure.common.test_data import rand
 from dataStructure.tree.binary_tree_by_linklist import BinaryTreeByLinkList
 
@@ -15,7 +16,7 @@ class IntPatricia(BinaryTreeByLinkList):
 
     class Node(BasicNode.Node):
         def __init__(self, key=None, value=None):
-            BasicNode.Node.__init__(self, key, value)
+            dataStructure.tree.node.Node.__init__(self, key, value)
             self.prefix = None
             self.mask = None
             self.id = IntPatricia.id    # 记录Node 生成顺序

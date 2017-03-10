@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # date: 2017-1-30
 
-import dataStructure.common.node as BasicNode
+import dataStructure.tree.node as BasicNode
 from common.Enum import Enum
 from dataStructure.common import gen_rand
 

@@ -4,7 +4,7 @@
 
 from dataStructure.common.gen_rand import gen_rand_list
 from dataStructure.tree.binary_tree_by_linklist import BinaryTreeByLinkList
-import dataStructure.common.node as BasicNode
+import dataStructure.tree.node as BasicNode
 
 class Leftist(BinaryTreeByLinkList):
     # 最小左高树，最小树，左子树最小深度大于右子树最小深度，page 284

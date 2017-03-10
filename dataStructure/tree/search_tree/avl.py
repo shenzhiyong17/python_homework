@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # date: 2016-2-19
-
+import dataStructure.tree.node
 from dataStructure.common.test_data import rand
 from dataStructure.tree.binary_tree_by_linklist import BinaryTreeByLinkList
-import dataStructure.common.node as BasicNode
+import dataStructure.tree.node as BasicNode
 import time
 
 
@@ -16,7 +16,7 @@ class AVL(BinaryTreeByLinkList):
 
     class Node(BasicNode.Node):
         def __init__(self, key=None):
-            BasicNode.Node.__init__(self, key)
+            dataStructure.tree.node.Node.__init__(self, key)
             self.bf = 0  # 平衡因子，bf = Hl-Hr，取值 [-1,0,1]
 
     def insert(self, root, key):
@@ -129,9 +129,9 @@ class AVL(BinaryTreeByLinkList):
 class AVL2(BinaryTreeByLinkList):
     ## from《数据结构》，from《算法新解》，insert用从下到上的迭代，左右旋转同红黑树
     ## bf 设置与 上边 相反
-    class Node(BasicNode.Node):
+    class Node(dataStructure.tree.node.Node):
         def __init__(self, key=None, parent=None):
-            BasicNode.Node.__init__(self, key)
+            dataStructure.tree.node.Node.__init__(self, key)
             self.bf = 0  # 平衡因子，bf = Hr-Hl，取值 [-1,0,1]
             self.parent = parent
 

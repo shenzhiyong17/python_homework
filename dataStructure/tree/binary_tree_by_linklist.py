@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # date: 2016-2-2
 
-from dataStructure.common.node import Node
+from dataStructure.tree.node import Node
 
 
 class BinaryTreeByLinkList():

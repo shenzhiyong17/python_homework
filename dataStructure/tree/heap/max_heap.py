@@ -47,13 +47,13 @@ class MaxHeap(CompletelyTree):
         print rand_list
         for i in rand_list:
             self.append(i)
-            # self.print_bt()
+            # self.print_tree()
             # print '-----'
 
         print self.pop().key
-        self.print_bt()
+        self.print_tree()
         print self.pop().key
-        self.print_bt()
+        self.print_tree()
 
 
 class Heapify(CompletelyTree):
@@ -110,10 +110,10 @@ class Heapify(CompletelyTree):
         for i in self.b_tree:
             print i,
         print ''
-        self.print_bt()
+        self.print_tree()
         for i in range(3):
             print self.pop()
-            self.print_bt()
+            self.print_tree()
 
 
 if __name__ == '__main__':

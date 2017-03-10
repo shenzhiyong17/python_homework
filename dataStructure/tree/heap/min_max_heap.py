@@ -18,7 +18,7 @@ class MinMaxHeap(CompletelyTree):
         else:
             return 'min'
 
-    def verify_min(self, index, key):
+    def __verify_min(self, index, key):
         if not self.is_in(index):
             self.b_tree.append(Node(key))
         grandparent = index / 4
@@ -31,7 +31,7 @@ class MinMaxHeap(CompletelyTree):
                 break
         self.b_tree[index] = Node(key)
 
-    def verify_max(self, index, key):
+    def __verify_max(self, index, key):
         if not self.is_in(index):
             self.b_tree.append(Node(key))
         grandparent = index / 4
@@ -44,7 +44,7 @@ class MinMaxHeap(CompletelyTree):
                 break
         self.b_tree[index] = Node(key)
 
-    def min_child_grandchild(self, index):
+    def __min_child_grandchild(self, index):
         #  找出儿孙中最小元素位置
         level = self.level(index)
         left = index * 2
@@ -59,9 +59,9 @@ class MinMaxHeap(CompletelyTree):
             else:
                 return index
         elif level == 'min':
-            min = self.b_tree[grandchild].key
-            res = grandchild
-            for i in range(grandchild + 1, grandchild + 4):
+            min = self.b_tree[right].key
+            res = right
+            for i in range(grandchild, grandchild + 4):
                 if not self.is_in(i):
                     break
                 if self.b_tree[i].key < min:
@@ -69,7 +69,7 @@ class MinMaxHeap(CompletelyTree):
                     res = i
             return res
 
-    def max_child_grandchild(self, index):
+    def __max_child_grandchild(self, index):
         level = self.level(index)
         left = index * 2
         right = index * 2 + 1
@@ -83,9 +83,9 @@ class MinMaxHeap(CompletelyTree):
             else:
                 return index
         elif level == 'max':
-            max = self.b_tree[grandchild].key
-            res = grandchild
-            for i in range(grandchild + 1, grandchild + 4):
+            max = self.b_tree[right].key
+            res = right
+            for i in range(grandchild, grandchild + 4):
                 if not self.is_in(i):
                     break
                 if self.b_tree[i].key > max:
@@ -104,26 +104,24 @@ class MinMaxHeap(CompletelyTree):
             if parent_level == 'min':
                 if key < parent.key:
                     self.b_tree.append(parent)
-                    self.verify_min(parent_index, key)
+                    self.__verify_min(parent_index, key)
                 else:
-                    self.verify_max(index, key)
+                    self.__verify_max(index, key)
             if parent_level == 'max':
                 if key > parent.key:
                     self.b_tree.append(parent)
-                    self.verify_max(parent_index, key)
+                    self.__verify_max(parent_index, key)
                 else:
-                    self.verify_min(index, key)
+                    self.__verify_min(index, key)
 
     def delete_min(self):
         root = self.b_tree[1]
         item = self.pop()
-        len = self.len()
-        last = len / 2
         i = 1
-        if len != 0:
-            while (i <= last):
-                k = self.min_child_grandchild(i)
-                if item.key <= self.b_tree[k].key:
+        if self.len() > 1:
+            while (i <= self.len() / 2):
+                k = self.__min_child_grandchild(i)
+                if item <= self.b_tree[k]:
                     break
                 self.b_tree[i] = self.b_tree[k]
                 if (k <= 2 * i + 1):
@@ -131,43 +129,57 @@ class MinMaxHeap(CompletelyTree):
                     break
                 parent = k / 2
                 if (item.key > self.b_tree[parent].key):
-                    tmp = self.b_tree[parent]
-                    self.b_tree[parent] = item
-                    item = tmp
+                    self.b_tree[parent], item = item, self.b_tree[parent]
                 i = k
             self.b_tree[i] = item
         return root
 
     def delete_max(self):
         item = self.pop()
-        parent = self.parent(self.len() - 1)
-        if not parent:
+        if self.len() <= 1:
             return item
-        i = self.max_child_grandchild(1)
+        i = self.__max_child_grandchild(1)
         max = self.b_tree[i]
+        if item > max:
+            return item
         last = self.len() / 2
         while (i <= last):
-            k = self.max_child_grandchild(i)
+            k = self.__max_child_grandchild(i)
             if item >= self.b_tree[k]:
                 break
             self.b_tree[i] = self.b_tree[k]
             if (k <= 2 * i + 1):
                 i = k
                 break
+            parent = k / 2
+            if (item.key < self.b_tree[parent].key):
+                self.b_tree[parent], item = item, self.b_tree[parent]
             i = k
         self.b_tree[i] = item
+
         return max
 
     def test(self):
-        # rand = [78, 27, 71, 18, 28, 77, 37, 24, 12, 44, 68, 39, 80, 64, 37, 38, 13, 39, 9, 85]
+        rand = [3, 77, 64, 97, 16, 25, 22, 77, 98, 53, 28, 24, 2, 93, 3, 32, 68, 73, 87]
+        # rand = [2, 3]
         print rand
+        # 验证升序
         for i in rand:
             self.insert(i)
-        self.print_bt()
-        print self.delete_max().key
-        self.print_bt()
-        print self.delete_min().key
-        self.print_bt()
+        order = []
+        while self.len() > 1:
+            order.append(self.delete_min())
+        sort = sorted(rand)
+        assert sort == self.list(order)
+
+        # 验证降序
+        for i in rand:
+            self.insert(i)
+        order = []
+        while self.len() > 1:
+            order.append(self.delete_max())
+        sort = sorted(rand, reverse=True)
+        assert sort == self.list(order)
 
 
 if __name__ == '__main__':

@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 # date: 2016-2-3
 
-from dataStructure.tree.binary_tree_by_linklist import *
 from dataStructure.common.test_data import rand
-
+from dataStructure.tree.binary_tree_by_linklist import *
+from dataStructure.tree.node import Node
 
 
 class SearchTree(BinaryTreeByLinkList):

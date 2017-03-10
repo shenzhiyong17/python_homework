@@ -86,8 +86,8 @@ class BinaryTreeByArray():
             index += 1
         return res
 
-    def print_bt(self):
-        if self.b_tree[1] is None:
+    def print_tree(self):
+        if len(self.b_tree) <= 1:
             return
         tree = copy.copy(self.b_tree)
         while not tree[-1]:
@@ -119,11 +119,19 @@ class BinaryTreeByArray():
             tabs /= 2
         print '==============================='
 
+    def list(self, A=None):
+        if A is None:
+            A = self.b_tree[1:]
+        res = []
+        for i in A:
+            res.append(i.key)
+        return res
+
     def test(self):
         for i in range(15):
             self.modify(random.randint(1, 99), i)
         self.b_tree[4] = None
-        self.print_bt()
+        self.print_tree()
         print self.level_order()
         print self.pre_order()
         print self.in_order()

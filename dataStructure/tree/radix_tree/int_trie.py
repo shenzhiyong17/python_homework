@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 # date: 2017-1-23
 
-import dataStructure.common.node as BasicNode
+import dataStructure.tree.node as BasicNode
+import dataStructure.tree.node
 from dataStructure.common.test_data import rand
 from dataStructure.tree.binary_tree_by_linklist import BinaryTreeByLinkList
 
@@ -13,7 +14,7 @@ class IntTrie(BinaryTreeByLinkList):
     class Node(BasicNode.Node):
         # key 必须为整数
         def __init__(self, key=None, value=None):
-            BasicNode.Node.__init__(self, key, value)
+            dataStructure.tree.node.Node.__init__(self, key, value)
 
         def __str__(self):
             return '%s' % (self.value)

@@ -16,7 +16,7 @@ class CompletelyTree(BinaryTreeByArray):
         return len(self.b_tree)
 
     def is_in(self, index):
-        return index < self.len() - 1
+        return index <= self.len() - 1 and index > 0
 
     def modify(self, key, index):
         if index > 1 and index < self.len():
@@ -34,10 +34,10 @@ class CompletelyTree(BinaryTreeByArray):
         for i in rand:
             self.append(Node(i))
         self.modify('ss', 5)
-        self.print_bt()
+        self.print_tree()
         print self.len()
         print self.pop()
-        self.print_bt()
+        self.print_tree()
         print self.level_order()
 
 

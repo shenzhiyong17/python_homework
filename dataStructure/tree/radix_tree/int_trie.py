@@ -65,7 +65,7 @@ class IntTrie(BinaryTreeByLinkList):
             return None
 
     def test(self):
-        # rand = [4, 6, 7, 0, 4]
+        rand = [4, 6, 7, 0, 9]
         print rand
         for i in rand:
             self.insert(i, i)

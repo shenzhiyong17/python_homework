@@ -9,7 +9,8 @@ import time
 
 
 class AVL(BinaryTreeByLinkList):
-    ## 平衡查找树，通过左右旋转保持查找数的二叉平衡性。
+    ## 平衡查找树，左小右大
+    ## 通过左右旋转保持查找数的二叉平衡性。
     ## from《数据结构》，node没有parent指针，旋转要注意原地返回
     ## 递归 insert
     unbalanced = False
@@ -52,7 +53,7 @@ class AVL(BinaryTreeByLinkList):
                     raise
         else:
             self.unbalanced = False
-            print "%s is already in the tree." % key
+            # print "%s is already in the tree." % key
         return root
 
     def right_rotation(self, root):
@@ -118,12 +119,27 @@ class AVL(BinaryTreeByLinkList):
         self.unbalanced = False
         return root
 
+    def search(self, key):
+        node = self.root
+        while node is not None and node.key != key:
+            if node.key > key:
+                node = node.left
+            else:
+                node = node.right
+        if node:
+            return node
+        raise
+
     def test(self):
         # rand = [70, 45, 72, 36, 83, 93, 82, 8, 99, 36, 65, 56, 5, 8, 86, 31, 4, 72, 47, 52]
         print rand
         for i in rand:
             self.root = self.insert(self.root, i)
-        self.print_tree()
+
+        for smaller in self.in_order(self.root.left):
+            assert smaller <= self.root.key
+        for bigger in self.in_order(self.root.right):
+            assert bigger >= self.root.key
 
 
 class AVL2(BinaryTreeByLinkList):
@@ -158,7 +174,7 @@ class AVL2(BinaryTreeByLinkList):
             elif x < t:
                 t = t.left
             else:
-                print '%s is already in tree' % key
+                # print '%s is already in tree' % key
                 return
         if parent is None:
             self.root = x
@@ -267,13 +283,31 @@ class AVL2(BinaryTreeByLinkList):
         else:
             y.parent.right = y
 
+    def search(self, key):
+        node = self.root
+        while node is not None and node.key != key:
+            if node.key > key:
+                node = node.left
+            else:
+                node = node.right
+        if node:
+            return node
+        raise
+
     def test(self):
-        # rand = [70, 45, 72, 36, 83, 93, 82, 8, 99, 36, 65, 56, 5, 8, 86, 31, 4, 72, 47, 52]
+        # rand = [27, 30, 10, 86, 47, 36, 7, 2, 84, 80, 68, 65, 35, 82, 85, 51, 99, 86, 93, 62]
         print rand
         for i in rand:
             self.insert(i)
-        print '==============================================='
-        self.print_tree()
+        node = self.rand_node()
+        assert self.search(node.key) == node
+
+        for smaller in self.in_order(node.left):
+            assert smaller <= node.key
+        for bigger in self.in_order(node.right):
+            assert bigger >= node.key
+
+
 
 
 if __name__ == '__main__':

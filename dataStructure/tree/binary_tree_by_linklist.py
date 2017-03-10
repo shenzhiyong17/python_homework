@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # date: 2016-2-2
 
+import random
 from dataStructure.tree.node import Node
 
 
@@ -28,7 +29,8 @@ class BinaryTreeByLinkList():
         res = r
         if node:
             self.in_order(node.left, res)
-            res.append(node.key)
+            if node.key:
+                res.append(node.key)
             self.in_order(node.right, res)
         return res
 
@@ -86,6 +88,15 @@ class BinaryTreeByLinkList():
             tabs /= 2
         print '================================'
 
+    def rand_node(self, n=30):
+        node = self.root
+        for i in range(random.randint(0, n)):
+            next = random.choice((node.left, node.right, node.parent))
+            while next is None:
+                next = random.choice((node.left, node.right, node.parent))
+            node = next
+        return node
+
 
 if __name__ == '__main__':
     bt = BinaryTreeByLinkList()
@@ -103,3 +114,4 @@ if __name__ == '__main__':
     p = p.left
     p.right = Node(4)
     bt.print_tree()
+    print bt.in_order(bt.root)

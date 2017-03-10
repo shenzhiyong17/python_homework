@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # date: 2016-2-3
 
-from dataStructure.common.test_data import rand
 from dataStructure.tree.completely_tree import *
 
 
@@ -44,7 +43,6 @@ class MaxHeap(CompletelyTree):
 
     def test(self):
         # rand = [82, 61, 80, 50, 66, 5, 84, 6, 94, 99, 61, 6, 73, 69, 24, 55, 77, 77, 26, 21]
-        # rand = [6,5,6]
         print rand
         for i in rand:
             self.add(i)
@@ -58,11 +56,9 @@ class MaxHeap(CompletelyTree):
 
 class Heapify(CompletelyTree):
     # 2017.02.6 《算法新解》
-    class Node(Node):
-        def __cmp__(self, other):
-            return cmp(self.key, other.key)
 
     def __init__(self):
+        # 把无序数组整个放进来再调整，只能在无序数组头部加None，不能初始化在self.b_tree里
         self.b_tree = []
 
     def comp(self, x, y):
@@ -72,6 +68,7 @@ class Heapify(CompletelyTree):
     def heapify(self, array, index):
         # 把堆调整为合法，条件是index的两个子树都是合法的堆
         # 数组索引从1开始
+        # 原地调整数组
         n = len(array)
         while True:
             l = index * 2
@@ -92,7 +89,7 @@ class Heapify(CompletelyTree):
         for i in range(n / 2, 0, -1):
             array = self.heapify(array, i)
         for i in array:
-            self.b_tree.append(self.Node(i))
+            self.b_tree.append(Node(i))
 
     def pop(self):
         head = self.b_tree[1]
@@ -103,21 +100,19 @@ class Heapify(CompletelyTree):
         return head
 
     def test(self):
-        rand.insert(0, None)
+        # rand = [26, 68, 10]
         print rand
-        self.build_heapify(rand)
-        for i in self.b_tree:
-            print i,
-        print ''
-        self.print_tree()
-        for i in range(3):
-            print self.pop()
-        self.print_tree()
+        self.build_heapify([None,] + rand)
+        order = []
+        while self.len() > 1:
+            order.append(self.pop())
+        sort = sorted(rand, reverse=False)
+        assert sort == self.list(order)
 
 
 if __name__ == '__main__':
     bt = MaxHeap()
     bt.test()
 
-    # bt = Heapify()
-    # bt.test()
+    bt = Heapify()
+    bt.test()

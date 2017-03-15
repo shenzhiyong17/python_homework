@@ -4,6 +4,7 @@
 
 import unittest
 
+import dataStructure.sort.quick_sort as QuickSort
 import dataStructure.basic.single_link_list as SingleLink
 import dataStructure.tree.binary_tree_by_arrary as BinTreeByArray
 import dataStructure.tree.completely_tree as CompletelyTree
@@ -20,6 +21,10 @@ import dataStructure.tree.heap.min_max_heap as MinMaxHeap
 
 
 class TestCase(unittest.TestCase):
+
+    def test_quicksort(self):
+        test = QuickSort.test
+        test()
 
     def test_single_link(self):
         link = SingleLink.LinkList()

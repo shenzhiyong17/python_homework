@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # date: 2016-2-19
+import random
+
 import dataStructure.tree.node
+import dataStructure.tree.node as BasicNode
 from dataStructure.common.test_data import rand
 from dataStructure.tree.binary_tree_by_linklist import BinaryTreeByLinkList
-import dataStructure.tree.node as BasicNode
-import time
 
 
 class AVL(BinaryTreeByLinkList):
@@ -135,11 +136,14 @@ class AVL(BinaryTreeByLinkList):
         print rand
         for i in rand:
             self.root = self.insert(self.root, i)
+        rand_key = random.choice(rand)
+        node = self.search(rand_key)
+        assert node.key == rand_key
 
-        for smaller in self.in_order(self.root.left):
-            assert smaller <= self.root.key
-        for bigger in self.in_order(self.root.right):
-            assert bigger >= self.root.key
+        for smaller in self.in_order(node.left):
+            assert smaller <= node.key
+        for bigger in self.in_order(node.right):
+            assert bigger >= node.key
 
 
 class AVL2(BinaryTreeByLinkList):
@@ -306,8 +310,6 @@ class AVL2(BinaryTreeByLinkList):
             assert smaller <= node.key
         for bigger in self.in_order(node.right):
             assert bigger >= node.key
-
-
 
 
 if __name__ == '__main__':

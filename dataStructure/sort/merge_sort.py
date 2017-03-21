@@ -1,47 +1,51 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
-import sys
+from dataStructure.common.test_data import rand
 
 
-def merge(ls, start, mid, end):
-    left = ls[start:mid + 1]
-    right = ls[mid + 1:end + 1]
-    print 'left: ', left
-    print 'right: ', right
-
+def merge(array, start, mid, end):
+    left = array[start:mid + 1]
+    right = array[mid + 1:end + 1]
     i = 0
     j = 0
     k = start
     while i < len(left) and j < len(right):
         if left[i] < right[j]:
-            ls[k] = left[i]
+            array[k] = left[i]
             i += 1
-            k += 1
-        elif left[i] > right[j]:
-            ls[k] = right[j]
+        else:
+            array[k] = right[j]
             j += 1
-            k += 1
+        k += 1
     while i < len(left):
-        ls[k] = left[i]
+        array[k] = left[i]
         i += 1
         k += 1
     while j < len(right):
-        ls[k] = right[j]
+        array[k] = right[j]
         j += 1
         k += 1
 
 
-def sort(ls, start, end):
+def sort(array, start=0, end=-1):
+    if end == -1:
+        end = len(array) - 1
     if start < end:
         mid = (start + end) / 2
-        sort(ls, start, mid)
-        sort(ls, mid + 1, end)
-        merge(ls, start, mid, end)
+        sort(array, start, mid)
+        sort(array, mid + 1, end)
+        merge(array, start, mid, end)
+
+
+def test(randlist=rand):
+    array = list(randlist)
+    print 'rand:   ', randlist
+    sort(array)
+    print 'array:  ', array
+    print 'sorted: ', sorted(randlist)
+    assert array == sorted(randlist)
 
 
 if __name__ == '__main__':
-    ls = [8, 6, 5, 4, 1, 2, 7, 9]
-    # ls = sys.argv[1:]
-    print ls
-    sort(ls, 0, len(ls) - 1)
-    print ls
+    test(rand)

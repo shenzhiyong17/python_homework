@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from dataStructure.common.test_data import rand
 
 def insert_sort1(A):
     for i in range(1, len(A)):
@@ -21,9 +22,11 @@ def insert_sort2(A):
         insert2(A, next, i)
     # return next
     t = -1
+    res = []
     while next[t] != -1:
         t = next[t]
-        print A[t],
+        res.append(A[t])
+    return res
 
 
 def insert2(A, next, i):
@@ -32,11 +35,17 @@ def insert2(A, next, i):
         j = next[j]
     next[j], next[i] = i, next[j]
 
+def test(rand):
+    array1 = list(rand)
+    array2 = list(rand)
+    sort1 = insert_sort1(array1)
+    sort2 = insert_sort1(array2)
+    print 'rand:  ', rand
+    print 'sort1: ', sort1
+    print 'sort2: ', sort2
+    assert sort1 == sort2 == sorted(rand)
 
 if __name__ == '__main__':
-    from dataStructure.common import gen_rand
+    test(rand)
 
-    rand = gen_rand.gen_rand_list(6, 1, 99)
-    # rand = [76, 47, 7, 37]
-    print rand
-    insert_sort2(rand)
+

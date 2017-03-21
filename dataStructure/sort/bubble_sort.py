@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import dataStructure.common.gen_rand as gen_rand
+from dataStructure.common.test_data import rand
 
 
 def bubble_sort(array):
@@ -20,7 +20,12 @@ def wrong_sort(array):
 
     return array
 
+def test(rand):
+    array = list(rand)
+    sort = bubble_sort(array)
+    print 'rand:  ', rand
+    print 'sort:  ', sort
+    assert sort == sorted(rand)
+
 if __name__ == '__main__':
-    array = gen_rand.gen_rand_list(15)
-    print array
-    print bubble_sort(array)
+    test(rand)

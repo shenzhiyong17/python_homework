@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from math import sqrt
+import math
+
+from common.timing import timing
+import prime
 
 
 def factor(num):
     # 返回某数的因子
-    sq = sqrt(num)
+    sq = math.sqrt(num)
     lst = list([x for x in range(2, int(sq))])
     result = []
     while lst:
@@ -16,7 +19,7 @@ def factor(num):
             result.append(num / i)
         lst.remove(i)
     if sq % 1 == 0: result.append(int(sq))
-    return result
+    return sorted(result)
 
 if __name__ == '__main__':
-    print factor(2016)
+    print timing(factor, 20169985515)

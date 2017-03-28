@@ -24,7 +24,7 @@ def test(rand):
     array = list(rand)
     sort = bubble_sort(array)
     print 'rand:  ', rand
-    print 'sort:  ', sort
+    print 'msort1:  ', sort
     assert sort == sorted(rand)
 
 if __name__ == '__main__':

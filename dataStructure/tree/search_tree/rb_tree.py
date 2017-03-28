@@ -173,14 +173,33 @@ class RBTree(BinaryTreeByLinkList):
         self.root.color = Color.BLACK
         return self.root
 
-    def test(self):
+    def search(self, key):
+        node = self.root
+        while node is not None and node.key != key:
+            if node.key > key:
+                node = node.left
+            else:
+                node = node.right
+        if node:
+            return node
+        raise
+
+    def rb_test(self, test_data=None):
         # rand = [70, 84, 62, 89, 49, 62, 25, 96, 68, 73]
-        print rand
-        for i in rand:
+        if test_data is None:
+            test_data = rand
+        # print test_data
+        for i in test_data:
             self.insert(i)
-        pre = self.pre_order(self.root)
-        self.print_tree()
+        # self.print_tree()
+        node = self.rand_node()
+        assert self.search(node.key) == node
+
+        for smaller in self.in_order(node.left):
+            assert smaller <= node.key
+        for bigger in self.in_order(node.right):
+            assert bigger >= node.key
 
 if __name__ == '__main__':
     bt = RBTree()
-    bt.test()
+    bt.rb_test()

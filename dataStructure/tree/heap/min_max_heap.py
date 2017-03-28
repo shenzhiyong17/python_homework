@@ -93,7 +93,7 @@ class MinMaxHeap(CompletelyTree):
                     res = i
             return res
 
-    def insert(self, key):
+    def append(self, key):
         index = self.len()
         parent = self.b_tree[index / 2]
         if not parent:
@@ -159,29 +159,30 @@ class MinMaxHeap(CompletelyTree):
 
         return max
 
-    def test(self):
-        rand = [3, 77, 64, 97, 16, 25, 22, 77, 98, 53, 28, 24, 2, 93, 3, 32, 68, 73, 87]
-        # rand = [2, 3]
-        print rand
+    def minmaxheap_test(self, test_data=None):
+        # rand = [3, 77, 64, 97, 16, 25, 22, 77, 98, 53, 28, 24, 2, 93, 3, 32, 68, 73, 87]
+        if test_data is None:
+            test_data = rand
+
         # 验证升序
-        for i in rand:
-            self.insert(i)
+        for i in test_data:
+            self.append(i)
         order = []
         while self.len() > 1:
             order.append(self.delete_min())
-        sort = sorted(rand)
+        sort = sorted(test_data)
         assert sort == self.list(order)
 
         # 验证降序
-        for i in rand:
-            self.insert(i)
+        for i in test_data:
+            self.append(i)
         order = []
         while self.len() > 1:
             order.append(self.delete_max())
-        sort = sorted(rand, reverse=True)
+        sort = sorted(test_data, reverse=True)
         assert sort == self.list(order)
 
 
 if __name__ == '__main__':
     bt = MinMaxHeap()
-    bt.test()
+    bt.minmaxheap_test()

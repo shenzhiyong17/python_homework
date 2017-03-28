@@ -18,8 +18,13 @@ class AVL(BinaryTreeByLinkList):
 
     class Node(BasicNode.Node):
         def __init__(self, key=None):
-            dataStructure.tree.node.Node.__init__(self, key)
+            BasicNode.Node.__init__(self, key)
             self.bf = 0  # 平衡因子，bf = Hl-Hr，取值 [-1,0,1]
+
+    def __init__(self, root=None):
+        self.root = root
+        if self.root is None:
+            self.root = self.Node(root)
 
     def insert(self, root, key):
         if root is self.root and self.root.key is None:
@@ -131,12 +136,14 @@ class AVL(BinaryTreeByLinkList):
             return node
         raise
 
-    def test(self):
+    def avl_test(self, test_data=None):
         # rand = [70, 45, 72, 36, 83, 93, 82, 8, 99, 36, 65, 56, 5, 8, 86, 31, 4, 72, 47, 52]
-        print rand
-        for i in rand:
+        if test_data is None:
+            test_data = rand
+        # print test_data
+        for i in test_data:
             self.root = self.insert(self.root, i)
-        rand_key = random.choice(rand)
+        rand_key = random.choice(test_data)
         node = self.search(rand_key)
         assert node.key == rand_key
 
@@ -149,9 +156,9 @@ class AVL(BinaryTreeByLinkList):
 class AVL2(BinaryTreeByLinkList):
     ## from《数据结构》，from《算法新解》，insert用从下到上的迭代，左右旋转同红黑树
     ## bf 设置与 上边 相反
-    class Node(dataStructure.tree.node.Node):
+    class Node(BasicNode.Node):
         def __init__(self, key=None, parent=None):
-            dataStructure.tree.node.Node.__init__(self, key)
+            BasicNode.Node.__init__(self, key)
             self.bf = 0  # 平衡因子，bf = Hr-Hl，取值 [-1,0,1]
             self.parent = parent
 
@@ -298,10 +305,12 @@ class AVL2(BinaryTreeByLinkList):
             return node
         raise
 
-    def test(self):
+    def avl2_test(self, test_data=None):
         # rand = [27, 30, 10, 86, 47, 36, 7, 2, 84, 80, 68, 65, 35, 82, 85, 51, 99, 86, 93, 62]
-        print rand
-        for i in rand:
+        if test_data is None:
+            test_data = rand
+        # print test_data
+        for i in test_data:
             self.insert(i)
         node = self.rand_node()
         assert self.search(node.key) == node
@@ -314,7 +323,7 @@ class AVL2(BinaryTreeByLinkList):
 
 if __name__ == '__main__':
     avl = AVL2()
-    avl.test()
+    avl.avl2_test()
 
     avl = AVL()
-    avl.test()
+    avl.avl_test()

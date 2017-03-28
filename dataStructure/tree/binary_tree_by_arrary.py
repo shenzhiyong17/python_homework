@@ -74,7 +74,7 @@ class BinaryTreeByArray():
         queue = []
         res = []
         index = 1
-        if not self.b_tree[index]:
+        if len(self.b_tree) <= 1:
             return res
         queue.append(self.b_tree[index])
         while len(queue) > 0:

@@ -45,7 +45,7 @@ class Deap(CompletelyTree):
                 self.b_tree.append(Node(key))
             return
         parent = index / 2
-        if index > self.len() - 1:
+        if not self.is_in(index):
             self.b_tree.append(None)
         while self.b_tree[parent].key > key and parent >= 2:
             self.b_tree[index] = self.b_tree[parent]
@@ -118,7 +118,7 @@ class Deap(CompletelyTree):
             else:
                 self.__min_insert(index, key)
 
-    def delete_min(self):
+    def pop_min(self):
         last = self.b_tree.pop(-1)
         if self.len() <= 2:
             return last
@@ -135,7 +135,7 @@ class Deap(CompletelyTree):
         self.__insert(index, last.key)
         return res
 
-    def delete_max(self):
+    def pop_max(self):
         last = self.b_tree.pop(-1)
         if self.len() <= 3:
             return last
@@ -152,29 +152,30 @@ class Deap(CompletelyTree):
         self.__insert(index, last.key)
         return res
 
-    def test(self):
+    def deap_test(self, test_data=None):
         # rand = [65, 13, 96, 96, 39, 35, 51, 23, 60, 66, 90, 38, 74, 67, 33, 14, 31, 88, 68, 74]
-        print rand
+        if test_data is None:
+            test_data = rand
 
         # 降序测试
-        for v in rand:
+        for v in test_data:
             self.append(v)
         order = []
         while self.len() > 2:
-            order.append(self.delete_max())
-        sort = sorted(rand, reverse=True)
+            order.append(self.pop_max())
+        sort = sorted(test_data, reverse=True)
         assert sort == self.list(order)
 
         # 升序测试
-        for v in rand:
+        for v in test_data:
             self.append(v)
         order = []
         while self.len() > 2:
-            order.append(self.delete_min())
-        sort = sorted(rand, reverse=False)
+            order.append(self.pop_min())
+        sort = sorted(test_data, reverse=False)
         assert sort == self.list(order)
 
 
 if __name__ == '__main__':
     deap = Deap()
-    deap.test()
+    deap.deap_test()

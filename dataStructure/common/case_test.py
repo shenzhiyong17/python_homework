@@ -4,27 +4,48 @@
 
 import unittest
 
-import dataStructure.sort.quick_sort as QuickSort
 import dataStructure.basic.single_link_list as SingleLink
+import dataStructure.sort.bubble_sort as BubbleSort
+import dataStructure.sort.select_sort as SelectSort
+import dataStructure.sort.insert_sort as InsertSort
+import dataStructure.sort.merge_sort as MergeSort
+import dataStructure.sort.quick_sort as QuickSort
 import dataStructure.tree.binary_tree_by_arrary as BinTreeByArray
 import dataStructure.tree.completely_tree as CompletelyTree
+import dataStructure.tree.heap.deap as Deap
+import dataStructure.tree.heap.leftist as Leftist
+import dataStructure.tree.heap.max_heap as MaxHeap
+import dataStructure.tree.heap.min_max_heap as MinMaxHeap
 import dataStructure.tree.radix_tree.int_patricia as IntPatricia
 import dataStructure.tree.radix_tree.int_trie as IntTrie
 import dataStructure.tree.search_tree.avl as AVL
 import dataStructure.tree.search_tree.rb_tree as RBTree
 import dataStructure.tree.search_tree.search_tree as SearchTree
 import dataStructure.tree.threaded_tree as ThreadTree
-import dataStructure.tree.heap.deap as Deap
-import dataStructure.tree.heap.max_heap as MaxHeap
-import dataStructure.tree.heap.leftist as Leftist
-import dataStructure.tree.heap.min_max_heap as MinMaxHeap
+from dataStructure.common.test_data import rand
 
 
 class TestCase(unittest.TestCase):
 
+    def test_insertsort(self):
+        test = InsertSort.test
+        test(rand)
+
+    def test_bubblesort(self):
+        test = BubbleSort.test
+        test(rand)
+
+    def test_selectsort(self):
+        test = SelectSort.test
+        test(rand)
+
+    def test_mergesort(self):
+        test = MergeSort.test
+        test(rand)
+
     def test_quicksort(self):
         test = QuickSort.test
-        test()
+        test(rand)
 
     def test_single_link(self):
         link = SingleLink.LinkList()
@@ -44,19 +65,19 @@ class TestCase(unittest.TestCase):
 
     def test_search_tree(self):
         tree = SearchTree.SearchTree()
-        tree.test()
+        tree.search_test()
 
     def test_rb_tree(self):
         tree = RBTree.RBTree()
-        tree.test()
+        tree.rb_test()
 
     def test_avl_tree(self):
         tree = AVL.AVL()
-        tree.test()
+        tree.avl_test()
 
     def test_avl2_tree(self):
         tree = AVL.AVL2()
-        tree.test()
+        tree.avl2_test()
 
     def test_trie(self):
         tree = IntTrie.IntTrie()
@@ -68,23 +89,24 @@ class TestCase(unittest.TestCase):
 
     def test_deap(self):
         heap = Deap.Deap()
-        heap.test()
+        heap.deap_test()
 
     def test_maxheap(self):
         heap = MaxHeap.MaxHeap()
-        heap.test()
+        heap.maxheap_test()
 
     def test_heapify(self):
         heap = MaxHeap.Heapify()
-        heap.test()
+        heap.heapify_test()
 
     def test_leftist(self):
         heap = Leftist.Leftist()
-        heap.test()
+        heap.leftist_test()
 
     def test_min_max_heap(self):
         heap = MinMaxHeap.MinMaxHeap()
-        heap.test()
+        heap.minmaxheap_test()
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 
-from thrift_code.tool.colorFormat import color_format
+from tools.colorFormat import color_format
 
 
 class output_format:
@@ -47,9 +47,9 @@ if __name__ == '__main__':
     item4 = {'upload': '30M', 'download': '40M', 'description': '2.4G', 'result': 'fail'}
     t = output_format()
     t.addtest('qos', ['description', 'upload', 'download', 'result'])
-    t.addtest('test', ['description', 'upload', 'download', 'result'])
-    t.insert('test', item1)
-    t.insert('test', item2)
+    t.addtest('deap_test', ['description', 'upload', 'download', 'result'])
+    t.insert('deap_test', item1)
+    t.insert('deap_test', item2)
     t.insert('qos', item3)
     t.insert('qos', item4)
     print t.gen_report(span=10)

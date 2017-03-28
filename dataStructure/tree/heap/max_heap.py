@@ -41,7 +41,7 @@ class MaxHeap(CompletelyTree):
         self.b_tree[parent] = tmp
         return max
 
-    def test(self):
+    def maxheap_test(self):
         # rand = [82, 61, 80, 50, 66, 5, 84, 6, 94, 99, 61, 6, 73, 69, 24, 55, 77, 77, 26, 21]
         print rand
         for i in rand:
@@ -99,7 +99,7 @@ class Heapify(CompletelyTree):
         self.heapify(self.b_tree, 1)
         return head
 
-    def test(self):
+    def heapify_test(self):
         # rand = [26, 68, 10]
         print rand
         self.build_heapify([None,] + rand)
@@ -112,7 +112,7 @@ class Heapify(CompletelyTree):
 
 if __name__ == '__main__':
     bt = MaxHeap()
-    bt.test()
+    bt.maxheap_test()
 
     bt = Heapify()
-    bt.test()
+    bt.heapify_test()

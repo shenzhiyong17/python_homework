@@ -44,7 +44,7 @@ class Leftist(BinaryTreeByLinkList):
         node = self.union(node.left, node.right)
         return node
 
-    def test(self):
+    def leftist_test(self):
         rand = gen_rand_list(10, 1, 99)
         # rand = [97, 56, 59, 94, 13]
         print rand
@@ -57,4 +57,4 @@ class Leftist(BinaryTreeByLinkList):
 
 if __name__ == '__main__':
     leftist = Leftist()
-    leftist.test()
+    leftist.leftist_test()

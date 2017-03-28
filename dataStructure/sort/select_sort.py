@@ -11,10 +11,12 @@ def select_sort(lst):
                 lst[i], lst[j] = lst[j], lst[i]
     return lst
 
-
-if __name__ == '__main__':
+def test(rand):
     array = list(rand)
     sort = select_sort(array)
     print 'rand: ', rand
-    print 'sort: ', sort
+    print 'msort1: ', sort
     assert sort == sorted(rand)
+
+if __name__ == '__main__':
+    test(rand)

@@ -53,7 +53,7 @@ class Performance():
 
     @staticmethod
     def sort():
-        Performance.performance(msort1, msort2, quick1, quick2, quick3)
+        Performance.performance(msort1, msort2, msort4, msort5, quick1, quick2, quick3)
 
 
 if __name__ == '__main__':

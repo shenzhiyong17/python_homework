@@ -54,7 +54,8 @@ def quick3(array, left=None, right=None):
         quick3(array, left, j - 1)
         quick3(array, j + 1, right)
 
-def quick4(array, left, right):
+
+def quick4(array, left=0, right=None):
     # 三路划分，多数元素相等的情况下性能更好。
     pass
 
@@ -75,11 +76,5 @@ def test(randlist=rand):
 
 
 if __name__ == '__main__':
-    from common.timing import timing
     # test()
-    array1 = list(rand)
-    array2 = list(rand)
-    array3 = list(rand)
-    print timing(quick1, array1)
-    print timing(quick2, array2)
-    print timing(quick3, array3)
+    quick4(rand)

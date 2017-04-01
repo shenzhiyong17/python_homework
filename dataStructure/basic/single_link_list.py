@@ -41,7 +41,7 @@ class LinkList():
             except:
                 raise
 
-    def delete(self, pos=0):
+    def pop(self, pos=0):
         if pos == 0:
             tmp = self.head.key
             self.head = self.head.next
@@ -63,6 +63,14 @@ class LinkList():
             tmp = tmp.next
         print tmp.key
 
+    def to_array(self):
+        array = []
+        tmp = self.head
+        while not self.is_tail(tmp):
+            array.append(tmp.key)
+            tmp = tmp.next
+        return array
+
     def revert(self):
         middle = None
         while self.head:
@@ -79,8 +87,9 @@ class LinkList():
         self.lprint()
         self.revert()
         self.lprint()
-        print self.delete(3)
+        print self.pop(3)
         self.lprint()
+        print self.to_array()
 
 
 if __name__ == "__main__":

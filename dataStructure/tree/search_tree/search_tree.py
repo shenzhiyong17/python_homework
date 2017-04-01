@@ -150,7 +150,7 @@ class SearchTree(BinaryTreeByLinkList):
         for bigger in self.in_order(node.right):
             assert bigger >= node.key
             # self.print_tree()
-            # self.delete(random.choice(test_data))
+            # self.pop(random.choice(test_data))
             # self.print_tree()
 
 

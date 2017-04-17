@@ -20,16 +20,16 @@ class Performance():
         for func in functions:
             title.append(func.__name__)
         output.addtest('performance', title)
-        for data_len in (100, 300, 800):
+        for data_len in (100, 300, 800, 5000):
             item = {'data_len': data_len}
             rand = gen_rand_list(data_len, 1, 9999)
             for func in functions:
                 test_data = copy.deepcopy(rand)
                 try:
                     time, res = timing(func, test_data)
+                    item[func.__name__] = '%.3fms' % (time * 1000)
                 except:
-                    time = -0.001
-                item[func.__name__] = '%.3fms' % (time * 1000)
+                    item[func.__name__] = 'fail'
             output.insert('performance', item)
         print output.gen_report()
 
@@ -53,9 +53,9 @@ class Performance():
 
     @staticmethod
     def sort():
-        Performance.performance(msort1, msort2, msort4, msort5, quick1, quick2, quick3)
+        Performance.performance(msort1, msort2, msort4, msort5, msort6, quick1, quick2, quick3)
 
 
 if __name__ == '__main__':
     Performance.sort()
-    Performance.search_tree()
+    # Performance.search_tree()

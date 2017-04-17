@@ -107,7 +107,9 @@ def merge4(ax, bx):
 
 
 def msort5(array):
+    # 2017-04-01
     # 自然归并排序
+    # 迭代合并
     # 从两头找最长有序子数列,归并到工作区数组,然后交换原数组和工作区
     if len(array) <= 1:
         return array
@@ -130,7 +132,7 @@ def msort5(array):
                 c -= 1
             if c < b:
                 c = b
-            if b - a >= n :
+            if b - a >= n:
                 return array
             if t:
                 f = merge5(array, a, b, c, d, array_b, f, 1)
@@ -163,10 +165,28 @@ def merge5(array, a, b, c, d, array_b, w, delta):
     return w
 
 
+def msort6(array):
+    # 2017-04-05
+    # 自底向上排序,每次从头部取出一对子列表,排序后追加到尾部
+    # 迭代合并
+    array = [[x] for x in array]
+    while len(array) > 1:
+        array.append(merge6(array.pop(0), array.pop(0)))
+    return [] if array == [] else array.pop()
+
+
+def merge6(xs, ys):
+    zs = []
+    while xs != [] and ys != []:
+        zs.append(xs.pop(0) if xs[0] < ys[0] else ys.pop(0))
+    return zs + (xs if xs != [] else ys)
+
+
 def test(randlist=rand):
     array1 = list(randlist)
     array2 = list(randlist)
     array5 = list(randlist)
+    array6 = list(randlist)
     print 'rand:    ', randlist
     msort1(array1)
     print 'array1:  ', array1
@@ -187,8 +207,11 @@ def test(randlist=rand):
     array5 = msort2(array5)
     print 'array5:  ', array5
 
+    array6 = msort2(array6)
+    print 'array5:  ', array6
+
     print 'sorted:  ', sorted(randlist)
-    assert array1 == array2 == array4 == array5 == sorted(randlist)
+    assert array1 == array2 == array4 == array5 == array6 == sorted(randlist)
 
 
 if __name__ == '__main__':

@@ -14,7 +14,7 @@ class Maze():
         self.maze = {}
         for x in range(long):
             for y in range(width):
-                self.maze[(x, y)] = (1, False)
+                self.maze[(x, y)] = ('.', False)
         for x in range(1, long - 1):
             for y in range(1, width - 1):
                 if random.randint(0, 100) < per:
@@ -23,7 +23,7 @@ class Maze():
         self.exit = (long - 2, width - 2)
         self.maze[self.entrance] = (0, False)
         self.maze[self.exit] = (0, False)
-        self.path = [self.entrance,]
+        self.path = []
         self.long = long
         self.width = width
 
@@ -41,7 +41,9 @@ class Maze():
             for y in range(self.width):
                 v, m = self.maze[(x, y)]
                 if (x, y) in self.path:
-                    v = color_format(v, mode='highlight')
+                    v = color_format('X', mode='highlight')
+                elif v == 0:
+                    v = ' '
                 print v,
             print '\n'
 
@@ -49,30 +51,31 @@ class Maze():
         p = self.entrance
         while p != self.exit:
             x, y = p
-            move = 0
-            for n in ((x + 1, y), (x, y + 1), (x - 1, y), (x, y - 1)):
-                if self.maze[n] == (0, False):
-                    self.maze[n] = (0, True)
-                    if not (p in self.path):
-                        self.path.append(p)
-                    p = n
-                    self.path.append(p)
-                    move = 1
+            n = p
+            for d in ((x + 1, y), (x, y + 1), (x - 1, y), (x, y - 1)):
+                if self.maze[d] == (0, False):
+                    self.maze[d] = (0, True)
+                    n = d
                     break
-            if self.path == []:
+            if n != p:
+                self.path.append(p)
+                p = n
+            elif not self.path:
                 raise RuntimeError('no way')
-            if move == 0:
+            else:
                 p = self.path.pop(-1)
+            # print self.path
+        self.path.append(p)
         return self.path
 
 
 if __name__ == '__main__':
     while True:
         try:
-            maze = Maze(5, 10, 80)
+            maze = Maze(25, 40, 60)
             # time.sleep(0.1)
             print maze.solvem()
-            maze.printmaze()
+            # maze.printmaze()
             print '========='
             maze.printpath()
             break

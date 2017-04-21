@@ -3,7 +3,6 @@
 # date: 2017-04-17
 
 import random
-import time
 
 from tools.colorFormat import color_format
 
@@ -27,15 +26,6 @@ class Maze():
         self.long = long
         self.width = width
 
-    def printmaze(self):
-        for x in range(self.long):
-            for y in range(self.width):
-                v, m = self.maze[(x, y)]
-                if v == 0:
-                    v = color_format(v, mode='highlight')
-                print v,
-            print '\n'
-
     def printpath(self):
         for x in range(self.long):
             for y in range(self.width):
@@ -47,12 +37,15 @@ class Maze():
                 print v,
             print '\n'
 
+    def around(self, p):
+        x, y = p
+        return (x + 1, y), (x, y + 1), (x - 1, y), (x, y - 1)
+
     def solvem(self):
         p = self.entrance
         while p != self.exit:
-            x, y = p
             n = p
-            for d in ((x + 1, y), (x, y + 1), (x - 1, y), (x, y - 1)):
+            for d in self.around(p):
                 if self.maze[d] == (0, False):
                     self.maze[d] = (0, True)
                     n = d
@@ -64,18 +57,26 @@ class Maze():
                 raise RuntimeError('no way')
             else:
                 p = self.path.pop(-1)
-            # print self.path
         self.path.append(p)
-        return self.path
+        # self.printpath()
 
+        index = 0
+        while index < len(self.path) -2:        # 优化path,去掉环路
+            p = self.path[index]
+            for around in self.around(p):
+                if around in self.path[index+2:]:
+                    while True:
+                        if self.path.pop(index+1) == around:
+                            break
+                    self.path.insert(index + 1, around)
+            index += 1
+        return self.path
 
 if __name__ == '__main__':
     while True:
         try:
             maze = Maze(25, 40, 60)
-            # time.sleep(0.1)
             print maze.solvem()
-            # maze.printmaze()
             print '========='
             maze.printpath()
             break

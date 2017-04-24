@@ -52,16 +52,27 @@ class Maze():
                     break
             if n != p:
                 self.path.append(p)
+                # for around in self.around(n):       # 优化path,去掉环路
+                #     try:
+                #         if around != p and self.maze[around] == (0, True):
+                #             while True:
+                #                 if self.path.pop(-1) == around:
+                #                     break
+                #             self.path.append(around)
+                #     except KeyError:
+                #         continue
+                #     except IndexError:
+                #         raise RuntimeError('no way')
                 p = n
             elif not self.path:
                 raise RuntimeError('no way')
             else:
                 p = self.path.pop(-1)
         self.path.append(p)
-        # self.printpath()
+        print '================'
 
         index = 0
-        while index < len(self.path) -2:        # 优化path,去掉环路
+        while index < len(self.path) - 2:        # 优化path,去掉环路
             p = self.path[index]
             for around in self.around(p):
                 if around in self.path[index+2:]:
@@ -73,13 +84,17 @@ class Maze():
         return self.path
 
 if __name__ == '__main__':
+    count = 1
     while True:
         try:
-            maze = Maze(25, 40, 60)
-            print maze.solvem()
+            maze = Maze(25, 50, 65)
+            maze.solvem()
+            print 'count: %s' %count
             print '========='
             maze.printpath()
             break
         except RuntimeError:
-            print '==========='
+            # print '==========='
+            count += 1
             continue
+

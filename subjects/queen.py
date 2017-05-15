@@ -31,8 +31,3 @@ def prettyprint(solution):
 import random
 
 prettyprint(random.choice(list(queens(6))))
-
-# q = queens(8)
-# print q.next()
-# for i in q :
-#     print i

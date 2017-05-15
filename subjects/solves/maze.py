@@ -105,6 +105,7 @@ class Maze():
                         stack.append(path + [p])
         return s
 
+
 if __name__ == '__main__':
     count = 1
     x = 25

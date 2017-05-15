@@ -33,7 +33,7 @@ class Halma():
     def solve(self):
         # 深度优先策略
         stack = [[self.start]]
-        s = []  #解集
+        s = []  # 解集
         while stack:
             c = stack.pop()
             if c[0] == self.end:
@@ -42,6 +42,7 @@ class Halma():
                 for m in self.moves(c[0]):
                     stack.append([m] + c)
         return s
+
 
 if __name__ == '__main__':
     halma = Halma(3)

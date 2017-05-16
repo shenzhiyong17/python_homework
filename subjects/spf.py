@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # date: 2017-05-11
-# ospf算法做迷宫的解
+# 简化spf算法做迷宫的解
 
 import random
 
 from tools.colorFormat import color_format
+from common.timing import timing
 
 
 class Node:
@@ -13,10 +14,10 @@ class Node:
         self.maze = maze
         self.pos = (x, y)
         self.blank = blank
-        self.map = {}
+        self.map = {self.pos: {'cost': 0, 'nexthop': self.pos}}
 
     def __str__(self):
-        return "%s:%s" % (self.pos, self.blank)
+        return "%s:%s map:%s" % (self.pos, self.blank, str(self.map))
 
     def neighbor(self):
         neighbor = []
@@ -28,38 +29,30 @@ class Node:
                     neighbor.append(self.maze[pos])
         return neighbor
 
-    def set_map(self, pos, cost, node):
+    def set_map(self, pos, cost, nexthop):         # 更新map后要广播更新
         if not pos in self.map:
-            self.map[pos] = {'cost': cost, 'from': node.pos}
+            self.map[pos] = {'cost': cost, 'nexthop': nexthop}
             self.broadcast(pos, cost)
         else:
             if cost < self.map[pos]['cost']:
-                self.map[pos] = {'cost': cost, 'from': node.pos}
+                self.map[pos] = {'cost': cost, 'nexthop': nexthop}
                 self.broadcast(pos, cost)
 
-    def hello(self, node, map):
-        for pos in map.keys():
-            node.set_map(pos, map[pos]['cost'], map['from'])
+    def update(self, pos, cost, node):          # 收到消息后更新自己的map
+        self.set_map(pos, cost + 1, node.pos)
 
-    def update(self, pos, cost, node):
-        self.set_map(pos, cost + 1, node)
-
-    def broadcast(self, pos=None, cost=0):
+    def broadcast(self, pos=None, cost=0):      # 广播自己的map中某一节点的信息
         if not pos:
             pos = self.pos
         for node in self.neighbor():
-            # print node
             node.update(pos, cost, self)
 
 
 class Maze:
-    def __init__(self, long, width, per=75):  # 迷宫大小x * y. p为百分比.
+    def __init__(self, long, width, per=75):    # 迷宫大小x * y. p为百分比.
         self.long = long
         self.width = width
         self.maze = {}
-        for x in range(long):
-            for y in range(width):
-                self.maze[(x, y)] = None  # 默认是墙
         for x in range(long):
             for y in range(width):
                 if random.randint(0, 100) < per:
@@ -78,22 +71,26 @@ class Maze:
         p = self.maze[self.entrance]
         path = [p]
         while p != self.maze[self.exit]:
-            # print p
-            p = self.maze[p.map[self.exit]['from']]
+            p = self.maze[p.map[self.exit]['nexthop']]
             path.append(p)
         return path
 
     def printpath(self, path):
+        head = '  '
+        for y in range(self.width):
+            head += ' %2s' % y
+        print head
         for x in range(self.long):
+            print '%2s' %x,
             for y in range(self.width):
                 try:
                     v = self.maze[(x, y)]
                     if v in path:
-                        v = color_format('X', mode='highlight')
+                        v = color_format(' X', mode='highlight')
                     elif v.blank:
-                        v = ' '
+                        v = '  '
                     else:
-                        v = '='
+                        v = ' ='
                     print v,
                 except AttributeError as e:
                     print x, y, e
@@ -106,6 +103,23 @@ class Maze:
         entrance = self.maze[self.entrance]
         exit.broadcast()
         if self.exit in entrance.map:
+            print entrance.map
+            path = self.path()
+            self.printpath(path)
+        else:
+            raise RuntimeError('no way')
+
+    def complete_convergence(self):         # 完全收敛,每个节点了解整张map
+        entrance = self.maze[self.entrance]
+        for x in range(self.long):
+            for y in range(self.width):
+                node = self.maze[(x, y)]
+                if node.blank:
+                    node.broadcast()
+        if self.exit in entrance.map:
+            print '%s\'s map (%s): ' % (entrance.pos, len(entrance.map))
+            for pos in entrance.map.keys():
+                print '\t%s: %s' %(pos, entrance.map[pos])
             path = self.path()
             self.printpath(path)
         else:
@@ -116,10 +130,13 @@ if __name__ == '__main__':
     cnt = 0
     while True:
         cnt += 1
+        print 'cnt: %s' %cnt
         try:
-            m = Maze(25, 80, 60)
-            m.run()
+            m = Maze(25, 40, 65)
+            t1 = timing(m.run)[0]
+            print 't1: %s' % t1
+            t2 = timing(m.complete_convergence)[0]
+            print 't2: %s' %t2
             break
         except RuntimeError:
             continue
-    print cnt

@@ -78,7 +78,7 @@ def msort4(xs):
         return xs
     ax = None
     bx = None
-    while xs:
+    while xs:       # 把xs 一分为二
         p = xs
         xs = xs.next
         p.next = ax  # 把pop(lklist) 加入到ax 的头部
@@ -90,8 +90,8 @@ def msort4(xs):
 
 
 def merge4(ax, bx):
-    s = p = Node()
-    while (ax and bx):
+    head = p = Node()
+    while ax and bx:
         if ax.key < bx.key:
             p.next = ax
             ax = ax.next
@@ -103,7 +103,7 @@ def merge4(ax, bx):
         p.next = ax
     if bx:
         p.next = bx
-    return s.next
+    return head.next
 
 
 def msort5(array):
@@ -182,12 +182,12 @@ def merge6(xs, ys):
     return zs + (xs if xs != [] else ys)
 
 
-def test(randlist=rand):
-    array1 = list(randlist)
-    array2 = list(randlist)
-    array5 = list(randlist)
-    array6 = list(randlist)
-    print 'rand:    ', randlist
+def test(test_data=rand):
+    array1 = list(test_data)
+    array2 = list(test_data)
+    array5 = list(test_data)
+    array6 = list(test_data)
+    print 'rand:    ', test_data
     msort1(array1)
     print 'array1:  ', array1
     array2 = msort2(array2)
@@ -210,8 +210,8 @@ def test(randlist=rand):
     array6 = msort2(array6)
     print 'array5:  ', array6
 
-    print 'sorted:  ', sorted(randlist)
-    assert array1 == array2 == array4 == array5 == array6 == sorted(randlist)
+    print 'sorted:  ', sorted(test_data)
+    assert array1 == array2 == array4 == array5 == array6 == sorted(test_data)
 
 
 if __name__ == '__main__':

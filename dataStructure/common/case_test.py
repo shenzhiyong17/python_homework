@@ -27,23 +27,23 @@ from dataStructure.common.test_data import rand
 
 class TestCase(unittest.TestCase):
 
-    def test_insertsort(self):
+    def test_insert_sort(self):
         test = InsertSort.test
         test(rand)
 
-    def test_bubblesort(self):
+    def test_bubble_sort(self):
         test = BubbleSort.test
         test(rand)
 
-    def test_selectsort(self):
+    def test_select_sort(self):
         test = SelectSort.test
         test(rand)
 
-    def test_mergesort(self):
+    def test_merge_sort(self):
         test = MergeSort.test
         test(rand)
 
-    def test_quicksort(self):
+    def test_quick_sort(self):
         test = QuickSort.test
         test(rand)
 
@@ -51,7 +51,7 @@ class TestCase(unittest.TestCase):
         link = SingleLink.LinkList()
         link.test()
 
-    def test_bin_tree_by_arrary(self):
+    def test_bin_tree_by_array(self):
         tree = BinTreeByArray.BinaryTreeByArray()
         tree.test()
 

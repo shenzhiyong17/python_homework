@@ -4,7 +4,8 @@
 
 from dataStructure.basic.single_link_list import *
 
-class Queue():
+
+class Queue:
 
     def __init__(self):
         self.head = Node()

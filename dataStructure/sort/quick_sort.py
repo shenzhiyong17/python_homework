@@ -15,17 +15,19 @@ def quick1(array):
 
 def quick2(array, left=None, right=None):
     # 二路划分，不考虑元素相等的特殊情况
-    if left is None: left = 0
-    if right is None: right = len(array) - 1
+    if left is None:
+        left = 0
+    if right is None:
+        right = len(array) - 1
     if left < right:
         i = left
         j = right
         p = array[left]
         while i < j:
-            while (array[j] > p and j > i):
+            while array[j] > p and j > i:
                 j -= 1
             array[i] = array[j]
-            while (array[i] <= p and i < j):
+            while array[i] <= p and i < j:
                 i += 1
             array[j] = array[i]
         array[i] = p
@@ -36,8 +38,10 @@ def quick2(array, left=None, right=None):
 
 
 def quick3(array, left=None, right=None):
-    if left is None: left = 0
-    if right is None: right = len(array) - 1
+    if left is None:
+        left = 0
+    if right is None:
+        right = len(array) - 1
     if left < right:
         i = left
         j = right
@@ -60,19 +64,19 @@ def quick4(array, left=0, right=None):
     pass
 
 
-def test(randlist=rand):
-    array1 = list(randlist)
-    array2 = list(randlist)
-    array3 = list(randlist)
-    print randlist
+def test(test_data=rand):
+    array1 = list(test_data)
+    array2 = list(test_data)
+    array3 = list(test_data)
+    print test_data
     array1 = quick1(array1)
     print 'array1: ', array1
     quick2(array2, 0, len(array2) - 1)
     print 'array2: ', array2
     quick3(array3, 0, len(array3) - 1)
     print 'array3: ', array3
-    print 'sorted: ', sorted(randlist)
-    assert array1 == array2 == array3 == sorted(randlist)
+    print 'sorted: ', sorted(test_data)
+    assert array1 == array2 == array3 == sorted(test_data)
 
 
 if __name__ == '__main__':

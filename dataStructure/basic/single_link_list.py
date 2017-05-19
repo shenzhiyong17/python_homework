@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # date: 2016-1-14
 
-class Node():
+
+class Node:
     key = None
     next = None
 
@@ -9,15 +10,16 @@ class Node():
         self.key = key
 
 
-class LinkList():
+class LinkList:
     def __init__(self):
         self.head = Node()
 
     def is_empty(self):
         return self.head.next is None and self.head.key is None
 
-    def is_tail(self, node):
-        return node.next == None
+    @staticmethod
+    def is_tail(node):
+        return node.next is None
 
     def add(self, key):
         node = self.head
@@ -46,17 +48,17 @@ class LinkList():
             tmp = self.head.key
             self.head = self.head.next
             return tmp
-        next = self.head
+        next_node = self.head
         try:
             for i in range(0, pos - 1):
-                next = next.next
-            tmp = next.next.key
-            next.next = next.next.next
+                next_node = next_node.next
+            tmp = next_node.next.key
+            next_node.next = next_node.next.next
             return tmp
         except:
             raise
 
-    def lprint(self):
+    def print_link(self):
         tmp = self.head
         while not self.is_tail(tmp):
             print tmp.key + ' -> ',
@@ -69,6 +71,7 @@ class LinkList():
         while not self.is_tail(tmp):
             array.append(tmp.key)
             tmp = tmp.next
+        array.append(tmp.key)
         return array
 
     def revert(self):
@@ -81,14 +84,14 @@ class LinkList():
         self.head = middle
 
     def test(self):
-        A = ['a', 'b', 'c', 'd', 'e']
-        for i in A:
+        array = ['a', 'b', 'c', 'd', 'e']
+        for i in array:
             self.insert(i)
-        self.lprint()
+        self.print_link()
         self.revert()
-        self.lprint()
+        self.print_link()
         print self.pop(3)
-        self.lprint()
+        self.print_link()
         print self.to_array()
 
 

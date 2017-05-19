@@ -14,7 +14,8 @@ class Deap(CompletelyTree):
         CompletelyTree.__init__(self)
         self.b_tree.append(Node(' '))  # 根，即b_tree[1]为空
 
-    def __max_heap(self, index):
+    @staticmethod
+    def __max_heap(index):
         while index > 3:
             index /= 2
         if index == 2:
@@ -152,14 +153,13 @@ class Deap(CompletelyTree):
         self.__insert(index, last.key)
         return res
 
-    def deap_test(self, test_data=None):
+    def deap_test(self, test_data=rand, pr=False):
         # rand = [65, 13, 96, 96, 39, 35, 51, 23, 60, 66, 90, 38, 74, 67, 33, 14, 31, 88, 68, 74]
-        if test_data is None:
-            test_data = rand
-
         # 降序测试
         for v in test_data:
             self.append(v)
+        if pr:
+            self.print_tree()
         order = []
         while self.len() > 2:
             order.append(self.pop_max())
@@ -178,4 +178,4 @@ class Deap(CompletelyTree):
 
 if __name__ == '__main__':
     deap = Deap()
-    deap.deap_test()
+    deap.deap_test(pr=True)

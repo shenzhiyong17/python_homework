@@ -6,23 +6,24 @@ import dataStructure.common.gen_rand
 from dataStructure.sort.select_sort import select_sort
 
 
-def binsearch(item, lst, l, r):
-    m = (l + r ) / 2
-    if item == lst[m]:
+def bin_search(element, array, l, r):
+    m = (l + r) / 2
+    if element == array[m]:
         return m
-    elif item > lst[m]:
-        return binsearch(item, lst, m, r)
-    elif item < lst[m]:
-        return binsearch(item, lst, l, m)
+    elif element > array[m]:
+        return bin_search(element, array, m, r)
+    elif element < array[m]:
+        return bin_search(element, array, l, m)
 
-def binsearch2(item, lst):
+
+def bin_search2(element, array):
     l = 0
-    r = len(lst)
+    r = len(array)
     while l < r:
         m = (l + r) / 2
-        if lst[m] == item:
+        if array[m] == element:
             return m
-        elif lst[m] < item:
+        elif array[m] < element:
             l = m + 1
         else:
             r = m
@@ -35,6 +36,6 @@ if __name__ == '__main__':
         num = random.randint(0, 9)
         item = lst[num]
         print num, lst, item
-        # print binsearch(item, lst, 0, len(lst) - 1)
-        assert binsearch(item, lst, 0, len(lst)) == num
-        assert binsearch2(item, lst) == num
+        # print bin_search(item, lst, 0, len(lst) - 1)
+        assert bin_search(item, lst, 0, len(lst)) == num
+        assert bin_search2(item, lst) == num

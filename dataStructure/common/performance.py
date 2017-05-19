@@ -7,12 +7,17 @@ import dataStructure.tree.search_tree.rb_tree as RB
 import dataStructure.tree.search_tree.search_tree as SearchTree
 from common.timing import timing
 from dataStructure.common.gen_rand import gen_rand_list
+from dataStructure.sort.insert_sort import *
+from dataStructure.sort.select_sort import *
 from dataStructure.sort.merge_sort import *
 from dataStructure.sort.quick_sort import *
 from tools.output_format import output_format
 
 
-class Performance():
+class Performance:
+    def __init__(self):
+        pass
+
     @staticmethod
     def performance(*functions):
         output = output_format()
@@ -28,7 +33,8 @@ class Performance():
                 try:
                     time, res = timing(func, test_data)
                     item[func.__name__] = '%.3fms' % (time * 1000)
-                except:
+                except Exception as e:
+                    print e
                     item[func.__name__] = 'fail'
             output.insert('performance', item)
         print output.gen_report()
@@ -53,7 +59,7 @@ class Performance():
 
     @staticmethod
     def sort():
-        Performance.performance(msort1, msort2, msort4, msort5, msort6, quick1, quick2, quick3)
+        Performance.performance(select_sort, insert_sort1, insert_sort2, msort1, msort2, msort4, msort5, msort6, quick1, quick2, quick3)
 
 
 if __name__ == '__main__':

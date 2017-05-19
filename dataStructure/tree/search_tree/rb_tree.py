@@ -110,7 +110,7 @@ class RBTree(BinaryTreeByLinkList):
             y.parent.right = y
         else:
             y.parent.left = y
-        # self.print_tree()
+            # self.print_tree()
 
     def right_rotate(self, node):
         # 右旋时node为最小值
@@ -137,7 +137,7 @@ class RBTree(BinaryTreeByLinkList):
             y.parent.left = y
         else:
             y.parent.right = y
-        # self.print_tree()
+            # self.print_tree()
 
     def insert_fix(self, node):  # 六种情况下需要调节节点颜色，然后通过左右旋保持平衡
         # print 'insert_fix %s\t\t' % node,
@@ -184,14 +184,15 @@ class RBTree(BinaryTreeByLinkList):
             return node
         raise
 
-    def rb_test(self, test_data=None):
+    def rb_test(self, test_data=None, pr=False):
         # rand = [70, 84, 62, 89, 49, 62, 25, 96, 68, 73]
         if test_data is None:
             test_data = rand
-        # print test_data
         for i in test_data:
             self.insert(i)
-        # self.print_tree()
+        if pr:
+            print 'test data: %s' % str(test_data)
+            self.print_tree()
         node = self.rand_node()
         assert self.search(node.key) == node
 
@@ -200,6 +201,7 @@ class RBTree(BinaryTreeByLinkList):
         for bigger in self.in_order(node.right):
             assert bigger >= node.key
 
+
 if __name__ == '__main__':
     bt = RBTree()
-    bt.rb_test()
+    bt.rb_test(pr=True)

@@ -27,24 +27,25 @@ class RBTree(BinaryTreeByLinkList):
             self.parent = parent
 
         def __str__(self):
-            return '%s（%s）' % (self.key, self.color)
+            if self.color == Color.BLACK:
+                c = 'B'
+            else:
+                c = 'R'
+            return '%s.%s' % (self.key, c)
 
-    def __init__(self, root=None):
-        self.root = self.creat_node(root)
+    def __init__(self, root_key=None):
+        BinaryTreeByLinkList.__init__(self, self.create_node(root_key))
 
-    def creat_node(self, key):
+    def create_node(self, key):
         node = self.Node(key)
         node.color = Color.RED
         node.left = self.Node(parent=node)
         node.right = self.Node(parent=node)
         return node
 
-    def isEmpty(self, node):
-        return node.key is None
-
     def insert(self, key):
         t = self.root
-        x = self.creat_node(key)
+        x = self.create_node(key)
         parent = None
         while t.key:
             parent = t
@@ -142,7 +143,7 @@ class RBTree(BinaryTreeByLinkList):
     def insert_fix(self, node):  # 六种情况下需要调节节点颜色，然后通过左右旋保持平衡
         # print 'insert_fix %s\t\t' % node,
         # print 'node.parent: %s' % node.parent
-        while (node.parent and node.parent.color == Color.RED):
+        while node.parent and node.parent.color == Color.RED:
             # print 'node %s' % node
             # print 'uncle: %s' % self.uncle(node)
             if self.uncle(node).color == Color.RED:

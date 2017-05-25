@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+# 几何图形
 
 import math
 
@@ -73,18 +75,22 @@ def psu(num):
 
 
 def sphere(R):
-    times = 2
+    times = 1
     for l in range(R):
         h = R - l
         #        r=int(((R*R)-(h*h))**0.5*times)
         r = int(math.sqrt((R * R) - (h * h)) * times)
+        if r < 1:
+            continue
         s = times * R - r
-        print(' ' * int(s) + '*' * 2 * r)
-    for h in range(R):
+        # print '%2s' %(2 * r - 1),
+        print('  ' * int(s) + '* ' * 2 * r)
+    for h in range(1, R):
         l = R - h
         r = int(((R * R) - (h * h)) ** 0.5 * times)
         s = times * R - r
-        print(' ' * int(s) + '*' * 2 * r)
+        # print '%2s' % (2 * r - 1),
+        print('  ' * int(s) + '* ' * 2 * r)
 
 
 def circle(R):
@@ -106,12 +112,12 @@ def circle(R):
 
 
 if __name__ == '__main__':
-    san1()
-    san2()
-    san3()
-    san4()
-    san5()
-    san6()
-    ling()
-    sphere(20)
-    circle(20)
+    # san1()
+    # san2()
+    # san3()
+    # san4()
+    # san5()
+    # san6()
+    # ling()
+    sphere(10)
+    # circle(20)

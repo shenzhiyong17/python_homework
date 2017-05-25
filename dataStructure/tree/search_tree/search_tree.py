@@ -8,12 +8,12 @@ from dataStructure.tree.node import Node
 
 
 class SearchTree(BinaryTreeByLinkList):
-    ## 搜索二叉树
-    ## left is smaller, right is larger !
-    ## in_order is sorted !
+    # 搜索二叉树
+    # left is smaller, right is larger !
+    # in_order is sorted !
 
     def search(self, key, node=None):
-        ## 递归查找 key值为 key的节点并返回
+        # 递归查找 key值为 key的节点并返回
         if node is None:
             node = self.root
         if node.key == key:
@@ -23,7 +23,7 @@ class SearchTree(BinaryTreeByLinkList):
         return self.search(key, node.right)
 
     def search2(self, key, node=None):
-        ## 返回查找的最后节点
+        # 返回查找的最后节点
         if node is None:
             node = self.root
         while node.key:
@@ -70,20 +70,24 @@ class SearchTree(BinaryTreeByLinkList):
             rear.right = node
         node.parent = rear
 
-    def tree_max(self, node):
-        ## 返回树的最大元素
+    def tree_max(self, node=None):
+        # 返回树的最大元素
+        if not node:
+            node = self.root
         while node.right is not None:
             node = node.right
         return node
 
-    def tree_min(self, node):
-        ## 返回树的最小元素
+    def tree_min(self, node=None):
+        # 返回树的最小元素
+        if not node:
+            node = self.root
         while node.left is not None:
             node = node.left
         return node
 
     def succ(self, key):
-        ## 前驱元素，为 y>x 的最小值
+        # 前驱元素，为 y>x 的最小值
         node = self.search(key)
         if node.right is not None:
             return self.tree_min(node.right)
@@ -94,7 +98,7 @@ class SearchTree(BinaryTreeByLinkList):
         return parent
 
     def pred(self, key):
-        ## 后继元素，为 y<x 的最大值
+        # 后继元素，为 y<x 的最大值
         node = self.search(key)
         if node.left is not None:
             return self.tree_max(node.left)
@@ -105,9 +109,9 @@ class SearchTree(BinaryTreeByLinkList):
         return parent
 
     def delete(self, key):
-        ## 如果node没有子树，直接删node
-        ## 如果node只有一个子树，直接子树取代node
-        ## 如果node有两个子树，用右子树最小值取代node
+        # 如果node没有子树，直接删node
+        # 如果node只有一个子树，直接子树取代node
+        # 如果node有两个子树，用右子树最小值取代node
         node = self.search(key)
         if node is None:
             return self.root
@@ -135,13 +139,16 @@ class SearchTree(BinaryTreeByLinkList):
                 parent.right = node
         return self.root
 
-    def search_test(self, test_data=None):
+    def search_test(self, test_data=None, pr=False):
         # rand = [76, 47, 7, 37]
         if test_data is None:
             test_data = rand
-        # print test_data
+        if pr:
+            print test_data
         for i in test_data:
             self.insert(i)
+        if pr:
+            self.print_tree()
         node = self.rand_node()
         assert self.search(node.key) == node
 
@@ -156,4 +163,4 @@ class SearchTree(BinaryTreeByLinkList):
 
 if __name__ == '__main__':
     bt = SearchTree()
-    bt.search_test()
+    bt.search_test(pr=True)

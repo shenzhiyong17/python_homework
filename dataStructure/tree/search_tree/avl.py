@@ -1,30 +1,31 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # date: 2016-2-19
+
 import random
 
-import dataStructure.tree.node
 import dataStructure.tree.node as BasicNode
 from dataStructure.common.test_data import rand
 from dataStructure.tree.binary_tree_by_linklist import BinaryTreeByLinkList
 
 
 class AVL(BinaryTreeByLinkList):
-    ## 平衡查找树，左小右大
-    ## 通过左右旋转保持查找数的二叉平衡性。
-    ## from《数据结构》，node没有parent指针，旋转要注意原地返回
-    ## 递归 insert
+    # 平衡查找树，左小右大
+    # 通过左右旋转保持查找数的二叉平衡性。
+    # from《数据结构》，node没有parent指针，旋转要注意原地返回
+    # 递归 insert
     unbalanced = False
 
     class Node(BasicNode.Node):
         def __init__(self, key=None):
             BasicNode.Node.__init__(self, key)
-            self.bf = 0  # 平衡因子，bf = Hl-Hr，取值 [-1,0,1]
+            self.bf = 0         # 平衡因子，bf = Hl-Hr，取值 [-1,0,1]
 
-    def __init__(self, root=None):
-        self.root = root
-        if self.root is None:
-            self.root = self.Node(root)
+        def __str__(self):
+            return '%s.%s' % (self.key, self.bf)
+
+    def __init__(self, root_key=None):
+        BinaryTreeByLinkList.__init__(self, self.Node(root_key))
 
     def insert(self, root, key):
         if root is self.root and self.root.key is None:
@@ -65,15 +66,15 @@ class AVL(BinaryTreeByLinkList):
     def right_rotation(self, root):
         child = root.left
         if child.bf == 1:
-            ## LL rotation
-            ## 新节点在root的左子树的左子树下，root为最靠下的bf为正负2的节点
+            # LL rotation
+            # 新节点在root的左子树的左子树下，root为最靠下的bf为正负2的节点
             root.left = child.right
             child.right = root
             root.bf = 0
             root = child
         else:
-            ## LR rotation
-            ## 新节点在root的左子树的右子树下
+            # LR rotation
+            # 新节点在root的左子树的右子树下
             grand_child = child.right
             child.right = grand_child.left
             grand_child.left = child
@@ -103,7 +104,7 @@ class AVL(BinaryTreeByLinkList):
             root.bf = 0
             root = child
         else:
-            ## LR rotation
+            # LR rotation
             grand_child = child.left
             child.left = grand_child.right
             grand_child.right = child
@@ -136,13 +137,16 @@ class AVL(BinaryTreeByLinkList):
             return node
         raise
 
-    def avl_test(self, test_data=None):
+    def avl_test(self, test_data=None, pr=False):
         # rand = [70, 45, 72, 36, 83, 93, 82, 8, 99, 36, 65, 56, 5, 8, 86, 31, 4, 72, 47, 52]
         if test_data is None:
             test_data = rand
-        # print test_data
+        if pr:
+            print test_data
         for i in test_data:
             self.root = self.insert(self.root, i)
+        if pr:
+            self.print_tree()
         rand_key = random.choice(test_data)
         node = self.search(rand_key)
         assert node.key == rand_key
@@ -154,28 +158,28 @@ class AVL(BinaryTreeByLinkList):
 
 
 class AVL2(BinaryTreeByLinkList):
-    ## from《数据结构》，from《算法新解》，insert用从下到上的迭代，左右旋转同红黑树
-    ## bf 设置与 上边 相反
+    # from《算法新解》，insert用从下到上的迭代，左右旋转同红黑树
+    # bf 设置与 上边 相反
     class Node(BasicNode.Node):
         def __init__(self, key=None, parent=None):
             BasicNode.Node.__init__(self, key)
-            self.bf = 0  # 平衡因子，bf = Hr-Hl，取值 [-1,0,1]
+            self.bf = 0          # 平衡因子，bf = Hr-Hl，取值 [-1,0,1]
             self.parent = parent
 
-            # def __str__(self):
-            #     return '%s.%s' % (self.key, self.bf)
+        def __str__(self):
+            return '%s.%s' % (self.key, self.bf)
 
-    def __init__(self, root=None):
-        self.root = self.creat_node(root)
+    def __init__(self, root_key=None):
+        BinaryTreeByLinkList.__init__(self, self.create_node(root_key))
 
-    def creat_node(self, key):
+    def create_node(self, key):
         node = self.Node(key)
         node.left = self.Node(parent=node)
         node.right = self.Node(parent=node)
         return node
 
     def insert(self, key):
-        x = self.creat_node(key)
+        x = self.create_node(key)
         parent = None
         t = self.root
         while t.key:
@@ -211,11 +215,11 @@ class AVL2(BinaryTreeByLinkList):
                 node = node.parent
             elif abs(bf) == 2:
                 if bf == 2:
-                    if r.bf == 1:  ## RR偏
+                    if r.bf == 1:  # RR偏
                         p.bf = 0
                         r.bf = 0
                         self.left_rotate(p)
-                    elif r.bf == -1:  ## RL偏
+                    elif r.bf == -1:  # RL偏
                         dy = r.left.bf
                         if dy == 1:
                             p.bf = -1
@@ -229,11 +233,11 @@ class AVL2(BinaryTreeByLinkList):
                         self.right_rotate(r)
                         self.left_rotate(p)
                 elif bf == -2:
-                    if l.bf == -1:  ## LL偏
+                    if l.bf == -1:  # LL偏
                         p.bf = 0
                         l.bf = 0
                         self.right_rotate(p)
-                    elif l.bf == 1:  ## LR偏
+                    elif l.bf == 1:  # LR偏
                         dy = l.right.bf
                         if dy == 1:
                             l.bf = -1
@@ -305,13 +309,16 @@ class AVL2(BinaryTreeByLinkList):
             return node
         raise
 
-    def avl2_test(self, test_data=None):
+    def avl2_test(self, test_data=None, pr=False):
         # rand = [27, 30, 10, 86, 47, 36, 7, 2, 84, 80, 68, 65, 35, 82, 85, 51, 99, 86, 93, 62]
         if test_data is None:
             test_data = rand
-        # print test_data
+        if pr:
+            print test_data
         for i in test_data:
             self.insert(i)
+        if pr:
+            self.print_tree()
         node = self.rand_node()
         assert self.search(node.key) == node
 
@@ -322,8 +329,8 @@ class AVL2(BinaryTreeByLinkList):
 
 
 if __name__ == '__main__':
-    avl = AVL2()
-    avl.avl2_test()
-
     avl = AVL()
-    avl.avl_test()
+    avl.avl_test(pr=True)
+
+    avl = AVL2()
+    avl.avl2_test(pr=True)

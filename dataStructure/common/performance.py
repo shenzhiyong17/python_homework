@@ -64,4 +64,4 @@ class Performance:
 
 if __name__ == '__main__':
     Performance.sort()
-    # Performance.search_tree()
+    Performance.search_tree()

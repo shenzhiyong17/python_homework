@@ -20,6 +20,12 @@ def gen_rand_string(length):
     return result
 
 
-if __name__ == '__main__':
-    print gen_rand_list(10)
-    print gen_rand_string(50)
+def disorder(array):
+    n = len(array)
+    i = 0
+    while i < n - 1:
+        t = random.choice(range(i+1, n))
+        array[i], array[t] = array[t], array[i]
+        i += 1
+    return array
+

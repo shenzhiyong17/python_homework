@@ -135,15 +135,15 @@ def arp_reply(ip_group, verbose=False):
 
 
 def gen_user(number):
-    base_mac = "b8:ca:3a:ff:99:01";
-    base_ip = "192.168.1.20";
-    split_ip = base_ip.split(".");
-    split_mac = base_mac.split(":");
-    ip_group = {};
+    base_mac = "b8:ca:3a:ff:99:01"
+    base_ip = "192.168.1.20"
+    split_ip = base_ip.split(".")
+    split_mac = base_mac.split(":")
+    ip_group = {}
     for i in range(number):
-        ip = ".".join(split_ip[0:-1] + [str(int(split_ip[-1]) + i)]);
-        mac = ":".join(split_mac[0:-1] + [str(int(split_mac[-1]) + i)]);
-        ip_group[ip] = mac;
+        ip = ".".join(split_ip[0:-1] + [str(int(split_ip[-1]) + i)])
+        mac = ":".join(split_mac[0:-1] + [str(int(split_mac[-1]) + i)])
+        ip_group[ip] = mac
         thread.start_new_thread(icmp_request,
                                 ({'hwsrc': mac, 'srcip': ip, 'payload': 500, 'interval': 2, 'keep': True},))
     arp_reply(ip_group, verbose=False)

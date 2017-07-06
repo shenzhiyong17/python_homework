@@ -2,63 +2,15 @@
 # -*- coding: utf-8 -*-
 # 2015.11.26
 
-import binascii
 import json
 from scapy.all import *
-
-import IOHelper
-import thrift_code.sys_api.xq_conf as xq_conf
-
-
-def get_gateway_ip():
-    t = os.popen('route -n')
-    for i in t:
-        if i.startswith('0.0.0.0'):
-            r = re.split("\s+", i)
-            return r[1]
-
-
-def get_gateway_hw(ip):
-    t = os.popen('arp -en %s' % ip)
-    for i in t:
-        if i.startswith(ip):
-            r = re.split("\s+", i)
-            return r[2]
-
-
-def gen_maclist(basemac, num, basehostname):
-    # maclist = { mac:hostname }
-    maclist = {}
-    split_mac = basemac.split(':')
-    for i in range(num):
-        last = "%02X" % (int(split_mac[-1]) + i)
-        maclist[":".join((split_mac[0:-1]) + [last])] = basehostname + str(i)
-    return maclist
-
-
-def trans_mac(mac):
-    # string to hex.
-    try:
-        res = ''
-        tmp = mac.split(':')
-        for i in tmp:
-            res += binascii.a2b_hex(i)
-        return res
-    except Exception as e:
-        raise
-
-
-def load_config(config_file_path):
-    return json.loads(IOHelper.ReadContent(config_file_path))
-
-
-def save_config(config_file_path, cfg):
-    return IOHelper.WriteContentAndSave(config_file_path, json.dumps(cfg), 'w')
+from process_net.network_config import NetworkConfig
+from networkPacket.process_net import *
 
 
 class GenUserDhcp:
     lease_file = os.curdir + '/dhcp.lease'
-    ping_server = xq_conf.nginx_server['ip']
+    ping_server = NetworkConfig.nginx_server['ip']
     eth = Ether()
 
     ip_group = {}  # { ip: mac }  # 维护的 ip-mac 表
@@ -72,7 +24,7 @@ class GenUserDhcp:
         self.lease = self.load_lease()  # {mac: (ip, timestamp) }  # 获取到的ip 记录到文件中，租期到期前续用上次ip。
 
         if lan_iface is None or lan_iface == '':
-            lan_iface = xq_conf.local_pc['lan_dev']
+            lan_iface = NetworkConfig.local_pc['lan_dev']
 
         self.lan_iface = lan_iface
 
@@ -150,7 +102,7 @@ class GenUserDhcp:
                         sendp(pkt, iface=self.lan_iface)
                         del self.arp_request_list[ip]
 
-    def range_ping(self, server=xq_conf.nginx_server['ip'], interval=1, count=5, payload=10, verbose=False):
+    def range_ping(self, server=NetworkConfig.nginx_server['ip'], interval=1, count=5, payload=10, verbose=False):
         gateway = get_gateway_ip()
         gwhw = get_gateway_hw(gateway)
         self.stop_ping()

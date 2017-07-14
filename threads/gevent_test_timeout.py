@@ -11,7 +11,7 @@ timeout.start()
 
 
 def wait():
-    gevent.sleep(2)
+    gevent.sleep(3)
 
 try:
     gevent.spawn(wait).join()

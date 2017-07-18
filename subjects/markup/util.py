@@ -1,11 +1,13 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 # 2016-4-13
+
 
 def lines(file):
     for line in file:
         yield line
     yield '\n'
+
 
 def blocks(file):
     block = []

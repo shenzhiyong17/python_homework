@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 #coding=utf-8
 # 2016-4-12
-# 20章，即时标记
+# 《python 基础教程》20章，即时标记
 
-import sys, re
+import sys
+import re
 from handler import *
 from rules import *
 from util import *
+
 
 class Parser:
 
@@ -33,6 +35,7 @@ class Parser:
                     if rule.action(block, self.handler):
                         break
         self.handler.end('document')
+
 
 class BasicTextParser(Parser):
 

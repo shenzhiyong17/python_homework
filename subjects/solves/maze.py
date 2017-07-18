@@ -7,6 +7,8 @@ import random
 
 from tools.colorFormat import color_format
 from common.timing import timing
+import gevent
+import time
 
 
 class Maze:
@@ -54,11 +56,12 @@ class Maze:
         self.map[self.exit].blank = True
         self.long = sx
         self.width = sy
+        self.done = False
 
     def __getitem__(self, pos):
         return self.map[pos]
 
-    def printpath(self, path):
+    def printpath(self, path=[]):
         head = '  '
         for y in range(self.width):
             head += ' %2s' % y
@@ -111,19 +114,52 @@ class Maze:
             index += 1
         return path
 
-    def solve_all(self):
-        # 深度优先策略,找出所有解
+    def solve_threads(self):
+
+        def walk(path):
+            if not self.done:
+                threads = []
+                for nei in path[-1].neighbor():
+                    if nei.pos == self.exit:
+                        path.append(nei)
+                        self.done = True
+                        return path
+                    if nei.blank and not nei.bread:
+                        nei.bread = True
+                        threads.append(gevent.spawn(walk, path + [nei]))
+                gevent.joinall(threads)
+                for thread in threads:
+                    if thread.value:
+                        return thread.value
+
+        p = self.map[self.entrance]
+        p.bread = True
+        path = [p]
+        res = walk(path)
+        if res:
+            return res
+        else:
+            raise RuntimeError('no way')
+
+    def solve_all(self, first=False):
+        # 深度优先策略,找出所有解, first=True 时找到地一个解就退出
+        # 性能差，不可用。
         stack = [[self.map[self.entrance]]]
         s = []
         while stack:
             path = stack.pop()
-            if path == self.exit:
+            if path[-1].pos == self.exit:
                 s.append(path)
+                if first:
+                    return s
             else:
-                for p in path[-1].neighbor():
-                    if not p in path and self.map[p][0] == 0:
-                        stack.append(path + [p])
-        return s
+                for nei in path[-1].neighbor():
+                    if nei not in path and nei.blank is True:
+                        stack.append(path + [nei])
+        if s:
+            return s
+        else:
+            raise RuntimeError('no way')
 
 
 if __name__ == '__main__':
@@ -134,7 +170,8 @@ if __name__ == '__main__':
         try:
             print count
             maze = Maze(x, y, 60)
-            t, path = timing(maze.solve)
+            t, path = timing(maze.solve_threads)
+            # t, path = timing(maze.solve)
             print 'count: %s' % count
             maze.printpath(path)
             print t

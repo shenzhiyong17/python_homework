@@ -44,11 +44,3 @@ def trans_mac(mac):
         return res
     except Exception as exc:
         raise exc
-
-
-def load_config(config_file_path):
-    return json.loads(ReadContent(config_file_path))
-
-
-def save_config(config_file_path, cfg):
-    return WriteContentAndSave(config_file_path, json.dumps(cfg), 'w')

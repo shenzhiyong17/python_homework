@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import json
 from shutil import copy
 
 
@@ -9,7 +10,9 @@ def WriteContentAndSave(file_path, content, mode='a'):
     fp = None
 
     try:
-        CreateFolder(file_path)
+        folder = os.path.dirname(file_path)
+        if not os.path.exists(folder):
+            CreateFolder(folder)
         fp = open(file_path, mode)
         os.chmod(file_path, 0o666)
         fp.write(content)
@@ -21,12 +24,11 @@ def WriteContentAndSave(file_path, content, mode='a'):
 
 
 def WriteLinesAndSave(file_path, lines, mode='a'):
-
     fp = None
     try:
         folder = os.path.dirname(file_path)
         if not os.path.exists(folder):
-            os.makedirs(folder)
+            CreateFolder(folder)
 
         fp = open(file_path, mode)
         fp.writelines(lines)
@@ -38,7 +40,6 @@ def WriteLinesAndSave(file_path, lines, mode='a'):
 
 
 def ReadContent(file_path):
-
     content = ""
     file_object = None
 
@@ -70,8 +71,7 @@ def copy_file(source_file_path, des_file_path):
     try:
         folder = os.path.dirname(des_file_path)
         if not os.path.exists(folder):
-            os.makedirs(folder)
-            os.chmod(folder, 0777)
+            CreateFolder(folder)
 
         if not os.path.exists(des_file_path):
             copy(source_file_path, des_file_path)
@@ -107,7 +107,6 @@ def is_exist(file_path):
 
 
 def find_path(file_folder, file_name):
-
     file_list = os.listdir(file_folder)
     for dir_info in file_list:
         file_path = os.path.join(file_folder, dir_info)
@@ -115,3 +114,11 @@ def find_path(file_folder, file_name):
             return file_path
 
     return None
+
+
+def load_config(config_file_path):
+    return json.loads(ReadContent(config_file_path))
+
+
+def save_config(config_file_path, cfg):
+    return WriteContentAndSave(config_file_path, json.dumps(cfg), 'w')

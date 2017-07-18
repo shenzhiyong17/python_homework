@@ -38,7 +38,7 @@ class Node:
         self.neigh = neighbor
         return neighbor
 
-    def set_route(self, dst, cost, nexthop):         # 更新map后要广播更新
+    def set_route(self, dst, cost, nexthop):  # 更新map后要广播更新
         if not dst in self.route_table:
             self.route_table[dst] = {'cost': cost, 'nexthop': nexthop}
             self.broadcast(dst, cost)
@@ -47,10 +47,10 @@ class Node:
                 self.route_table[dst] = {'cost': cost, 'nexthop': nexthop}
                 self.broadcast(dst, cost)
 
-    def update(self, dst, cost, nexthop):          # 收到消息后更新自己的map
+    def update(self, dst, cost, nexthop):  # 收到消息后更新自己的map
         self.set_route(dst, cost + 1, nexthop.pos)
 
-    def broadcast(self, dst=None, cost=0, exclude=None):      # 广播自己的map中某一节点的信息
+    def broadcast(self, dst=None, cost=0, exclude=None):  # 广播自己的map中某一节点的信息
         if not dst:
             dst = self.pos
         for node in self.neighbor():
@@ -60,7 +60,7 @@ class Node:
 
 
 class Map:
-    def __init__(self, long, width, per=75):    # 迷宫大小x * y. p为百分比.
+    def __init__(self, long, width, per=75):  # 迷宫大小x * y. p为百分比.
         self.long = long
         self.width = width
         self.map = {}
@@ -96,7 +96,7 @@ class Map:
             head += ' %2s' % y
         print head
         for x in range(self.long):
-            print '%2s' %x,
+            print '%2s' % x,
             for y in range(self.width):
                 try:
                     v = self.map[(x, y)]
@@ -122,7 +122,7 @@ class Map:
         else:
             raise RuntimeError('no way')
 
-    def complete_convergence(self):         # 完全收敛,每个节点了解整张map
+    def complete_convergence(self):  # 完全收敛,每个节点了解整张map
         for x in range(self.long):
             for y in range(self.width):
                 node = self.map[(x, y)]
@@ -140,9 +140,9 @@ if __name__ == '__main__':
             t1 = timing(m.run)[0]
             m.printpath(m.entrance, m.exit)
             print 't1: %s' % t1
-            # t2 = timing(m.complete_convergence)[0]
-            # print 't2: %s' %t2
-            # m.printpath(m.entrance, m.exit)
+            t2 = timing(m.complete_convergence)[0]
+            print 't2: %s' % t2
+            m.printpath(m.entrance, m.exit)
             break
         except RuntimeError:
             continue

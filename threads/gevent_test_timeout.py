@@ -4,14 +4,14 @@
 import gevent
 from gevent import Timeout
 
+
+def wait():
+    gevent.sleep(3)
+
 seconds = 2
 
 timeout = Timeout(seconds)
 timeout.start()
-
-
-def wait():
-    gevent.sleep(3)
 
 try:
     gevent.spawn(wait).join()

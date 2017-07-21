@@ -13,12 +13,12 @@ def hello_from(n):
     print('Size of pool %s' % len(pool))
 
 
-pool.map(hello_from, xrange(3))
+# pool.map(hello_from, xrange(3))
 
 
 # 当构造gevent驱动的服务时，经常会将围绕一个池结构的整个服务作为中心。 一个例子就是在各个socket上轮询的类。
 
-class SocketPool(object):
+class SocketPool:
     def __init__(self):
         self.pool = Pool(1000)
 
@@ -37,4 +37,5 @@ class SocketPool(object):
         self.pool.kill()
 
 
-sp = SocketPool()
+if __name__ == '__main__':
+    sp = SocketPool()

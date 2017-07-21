@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 # 简单server
+# see background.py
 
 from gevent.server import StreamServer
 

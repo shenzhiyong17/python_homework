@@ -13,17 +13,17 @@ sem = BoundedSemaphore(2)
 
 def worker1(n):
     sem.acquire()
-    print('Worker %i acquired semaphore' % n)
+    print('Worker1 %i acquired semaphore' % n)
     sleep(1)
     sem.release()
-    print('Worker %i released semaphore' % n)
+    print('Worker1 %i released semaphore' % n)
 
 
 def worker2(n):
     with sem:
-        print('Worker %i acquired semaphore' % n)
+        print('Worker2 %i acquired semaphore' % n)
         sleep(1)
-    print('Worker %i released semaphore' % n)
+    print('Worker2 %i released semaphore' % n)
 
 
 pool = Pool()

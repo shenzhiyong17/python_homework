@@ -8,12 +8,6 @@ from gevent.local import local
 from werkzeug.local import LocalProxy
 from werkzeug.wrappers import Request
 from contextlib import contextmanager
-import hashlib
-import base64
-import urllib2
-import urllib
-from common.Encript import AESCipher
-
 from gevent.wsgi import WSGIServer
 
 _requests = local()
@@ -59,22 +53,6 @@ def application(environ, start_response):
 
     start_response(status, headers)
     return body
-
-
-def get_channel_secret():
-    cmd = "uci get messaging.deviceInfo.CHANNEL_SECRET"
-    return "yabUeoFU+C8Rg9wTlUyuRM9mQAj8bM9XNVmFY/oOFVA="
-
-
-def gen_key(channel_secret, nonce):
-    sh = hashlib.sha256()
-    sh.update(base64.b64decode(channel_secret) + base64.b64decode(nonce))
-    return base64.b64encode(sh.digest())
-
-
-def encrypt(encrypt_key, content):
-    encrypt_ins = AESCipher(encrypt_key)
-    return encrypt_ins.encrypt(content)
 
 
 def main():

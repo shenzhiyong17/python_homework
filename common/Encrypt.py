@@ -1,5 +1,5 @@
 import base64
-
+import hashlib
 
 class AESCipher:
     def __init__(self, key, bs=None, iv=None):
@@ -31,8 +31,20 @@ class AESCipher:
 
     def ecb_encrypt(self, raw):
         cipher = self.AES.new(self.key, self.AES.MODE_ECB)
+        print 'self.pad(raw): ', self.pad(raw)
         return base64.b64encode(cipher.encrypt(self.pad(raw)))
 
     def ecb_decrypt(self, encrypt_string):
         cipher = self.AES.new(self.key, self.AES.MODE_ECB)
         return self.unpad(cipher.decrypt(base64.b64decode(encrypt_string)))
+
+
+def gen_key(channel_secret, nonce):
+    sh = hashlib.sha256()
+    sh.update(base64.b64decode(channel_secret) + base64.b64decode(nonce))
+    return base64.b64encode(sh.digest())
+
+
+def encrypt(encrypt_key, content):
+    encrypt_ins = AESCipher(encrypt_key)
+    return encrypt_ins.encrypt(content)

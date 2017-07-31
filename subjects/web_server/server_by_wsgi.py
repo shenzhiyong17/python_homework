@@ -72,22 +72,22 @@ def logic(environ, debug=False):
                 result = json.dumps(result, ensure_ascii=False).encode('utf-8')
                 if debug:
                     print 'result: ', result
+                if querys.get('nonce'):
+                    if debug:
+                        print 'nonce: ', querys['nonce']
+                    channel_secret = get_channel_secret()
+                    encrypt_key = gen_key(channel_secret, urllib.unquote(querys['nonce']))[:16]
+                    if debug:
+                        print 'encrypt_key: ', encrypt_key
+                    result = encrypt(encrypt_key, result)
+                    if debug:
+                        print 'encrypt result: ', result
             else:
                 # proxy
-                result = proxy('GET', request).encode('utf-8')
-            if querys.get('nonce'):
-                if debug:
-                    print 'nonce: ', querys['nonce']
-                channel_secret = get_channel_secret()
-                encrypt_key = gen_key(channel_secret, urllib.unquote(querys['nonce']))[:16]
-                if debug:
-                    print 'encrypt_key: ', encrypt_key
-                result = encrypt(encrypt_key, result)
-                if debug:
-                    print 'encrypt result: ', result
+                result = proxy('GET', request, debug=debug).encode('utf-8')
 
         elif method == 'POST':
-            result = proxy('POST', request)
+            result = proxy('POST', request, debug=debug).encode('utf-8')
 
     except Exception as e:
         print e
@@ -98,10 +98,10 @@ def application(environ, start_response):
     status = '200 OK'
 
     with sessionmanager(environ):
-        body, hit = logic(environ, debug=True)
-        print 'body type: ', type(body), body
-        print 'hit: ', hit
-        print '=================== end ===================='
+        body, hit = logic(environ, debug=False)
+        # print 'body type: ', type(body), body
+        # print 'hit: ', hit
+        # print '=================== end ===================='
 
     headers = [
         ('Content-Type', 'text/html'),
@@ -118,7 +118,7 @@ def application(environ, start_response):
 
 def get_channel_secret():
     cmd = "uci get messaging.deviceInfo.CHANNEL_SECRET"
-    return "yabUeoFU+C8Rg9wTlUyuRM9mQAj8bM9XNVmFY/oOFVA="
+    return "YQkdV/JZMnOfvT5oeJecUoWDIH7ilkVLg1uBAamaFmo="
 
 
 def main():

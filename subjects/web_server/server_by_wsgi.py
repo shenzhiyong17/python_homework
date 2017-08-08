@@ -98,10 +98,7 @@ def application(environ, start_response):
     status = '200 OK'
 
     with sessionmanager(environ):
-        body, hit = logic(environ, debug=False)
-        # print 'body type: ', type(body), body
-        # print 'hit: ', hit
-        # print '=================== end ===================='
+        body, hit = logic(environ, debug=True)
 
     headers = [
         ('Content-Type', 'text/html'),

@@ -3,6 +3,9 @@
 
 import time
 
+start = time.time()
+tic = lambda: '%.1f' % (time.time() - start)
+
 
 def timing(function, *args):
     t1 = time.time()

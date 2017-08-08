@@ -22,8 +22,9 @@ def permutation1(result, item, array):
         for element in array:
             temp_list = array[:]
             temp_list.remove(element)
-            permutation1(result, item + (element, ), temp_list)
+            permutation1(result, item + (element,), temp_list)
     return result
+
 
 def combination(num, stat=()):
     # 返回长度为n 的全部组合
@@ -33,6 +34,7 @@ def combination(num, stat=()):
         for r in 0, 1:
             for result in combination(num, stat + (r,)):
                 yield result
+
 
 if __name__ == '__main__':
     for item in permutation([], [1, 2, 3, 4]):

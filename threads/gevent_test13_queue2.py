@@ -29,8 +29,7 @@ def boss(job=None, n=20):
     free since the maxsize of the task queue is 3.
     """
     for i in xrange(1, n):
-        something = job(i) if job else i
-        tasks.put(something)
+        tasks.put(job(i))
         print 'assigned job %s in queue' % i
     print('Assigned all work in iteration 1')
 

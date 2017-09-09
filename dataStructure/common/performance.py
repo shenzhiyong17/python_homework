@@ -25,9 +25,10 @@ class Performance:
         for func in functions:
             title.append(func.__name__)
         output.addtest('performance', title)
-        for data_len in (100, 300, 800, 5000):
+        for data_len in (100, 300, 800, 2000):
             item = {'data_len': data_len}
             rand = gen_rand_list(data_len, 1, 9999)
+            # rand = range(data_len)
             for func in functions:
                 test_data = copy.deepcopy(rand)
                 try:

@@ -186,6 +186,7 @@ class RBTree(BinaryTreeByLinkList):
         raise
 
     def rb_test(self, test_data=None, pr=False):
+        self.__init__()
         # rand = [70, 84, 62, 89, 49, 62, 25, 96, 68, 73]
         if test_data is None:
             test_data = rand

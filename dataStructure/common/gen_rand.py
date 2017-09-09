@@ -22,10 +22,8 @@ def gen_rand_string(length):
 
 def disorder(array):
     n = len(array)
-    i = 0
-    while i < n - 1:
+    for i in range(n-1):
         t = random.choice(range(i+1, n))
         array[i], array[t] = array[t], array[i]
-        i += 1
     return array
 

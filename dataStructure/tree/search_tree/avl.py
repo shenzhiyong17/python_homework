@@ -138,6 +138,7 @@ class AVL(BinaryTreeByLinkList):
         raise
 
     def avl_test(self, test_data=None, pr=False):
+        self.__init__()
         # rand = [70, 45, 72, 36, 83, 93, 82, 8, 99, 36, 65, 56, 5, 8, 86, 31, 4, 72, 47, 52]
         if test_data is None:
             test_data = rand
@@ -310,6 +311,7 @@ class AVL2(BinaryTreeByLinkList):
         raise
 
     def avl2_test(self, test_data=None, pr=False):
+        self.__init__()
         # rand = [27, 30, 10, 86, 47, 36, 7, 2, 84, 80, 68, 65, 35, 82, 85, 51, 99, 86, 93, 62]
         if test_data is None:
             test_data = rand

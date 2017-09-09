@@ -141,6 +141,7 @@ class SearchTree(BinaryTreeByLinkList):
 
     def search_test(self, test_data=None, pr=False):
         # rand = [76, 47, 7, 37]
+        self.__init__()
         if test_data is None:
             test_data = rand
         if pr:

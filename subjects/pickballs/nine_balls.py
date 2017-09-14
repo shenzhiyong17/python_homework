@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 # date: 2017-09-08
 
+# 第一层   3：3：3
+# 第二层   2：1 + 2：1 + 2：1
+
+
 from subjects.pickballs.ball import *
 
 
@@ -12,7 +16,7 @@ def handle(balls):
     right = sum(balls[3:6])  # 3, 4, 5
     if left == right:  # 6, 7, 8
         normal.extend(balls[:6])
-        left = sum(balls[6:8])   # 6, 7
+        left = sum(balls[6:8])  # 6, 7
         right = sum([normal[0], balls[8]])  # 0, 8
         if left > right:
             balls[6].mark = 1
@@ -49,7 +53,5 @@ def handle(balls):
                 return balls[4] if balls[4] < balls[5] else balls[5]
         elif left > right:  # 0, 1
             return balls[0] if balls[0] > balls[1] else balls[1]
-        else:   # 3
+        else:  # 3
             return balls[3]
-
-

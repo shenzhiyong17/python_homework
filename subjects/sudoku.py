@@ -6,10 +6,14 @@ import random
 
 
 class cell:
-    def __init__(self, x, y, value=None):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.value = value
+        self.value = None
+        self.valid = [i for i in range(1, 10)]
+
+    def init(self):
+        self.value = None
         self.valid = [i for i in range(1, 10)]
 
     def __str__(self):
@@ -22,11 +26,10 @@ class cell:
 
 class SudoKu:
     def __init__(self):
-        self.default = None
         self.matrix = []
         for y in range(9):
             for x in range(9):
-                self.matrix.append(cell(x, y, self.default))
+                self.matrix.append(cell(x, y))
 
     def sub_matrix(self, sub_index):
         # 小九格，sub_index: 0~8
@@ -65,20 +68,31 @@ class SudoKu:
         return False
 
     def fill_random(self, cell):
-        tmp = [i for i in range(1, 10)]
+        tmp = list(cell.valid)
         random.shuffle(tmp)
         for value in tmp:
             if not self.conflict(cell.set_value(value)):
                 return True
+            else:
+                cell.valid.remove(value)
         return False
 
-    def init_matrix(self):
-        for cell in self.matrix:
-            cell.set_value(self.default)
-        for cell in self.matrix:
-            if not self.fill_random(cell):
-                return False
-        return True
+    def init_matrix(self, pos=0):
+        deep = 1
+        while pos < 81:
+            for cell in self.matrix[pos + 1:deep]:
+                cell.init()
+            # print 'pos: %s' % pos
+            cell = self.matrix[pos]
+            if cell.value is not None:
+                cell.valid.remove(cell.value)
+                cell.value = None
+            if not cell.valid or not self.fill_random(cell):
+                pos -= 1
+            else:
+                pos += 1
+            if not deep > pos:
+                deep = pos + 1
 
     def pr_pazzle(self, percent=100):
         i = 0
@@ -99,9 +113,7 @@ class SudoKu:
 
 if __name__ == '__main__':
     sudoku = SudoKu()
-    cnt = 0
-    while not sudoku.init_matrix():
-        cnt += 1
-    print '%s times init' % cnt
+    sudoku.init_matrix()
     sudoku.pr_pazzle(40)
+    print '\n' * 10
     sudoku.pr_pazzle(100)

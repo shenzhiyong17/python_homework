@@ -3,6 +3,7 @@
 # date: 2017-11-10
 
 import random
+import copy
 
 
 class cell:
@@ -12,7 +13,7 @@ class cell:
         self.value = None
         self.valid = [i for i in range(1, 10)]
 
-    def init(self):
+    def reset(self):
         self.value = None
         self.valid = [i for i in range(1, 10)]
 
@@ -77,11 +78,12 @@ class SudoKu:
                 cell.valid.remove(value)
         return False
 
-    def init_matrix(self, pos=0):
+    def create_matrix(self):
+        pos = 0
         deep = 1
         while pos < 81:
             for cell in self.matrix[pos + 1:deep]:
-                cell.init()
+                cell.reset()
             # print 'pos: %s' % pos
             cell = self.matrix[pos]
             if cell.value is not None:
@@ -94,14 +96,15 @@ class SudoKu:
             if not deep > pos:
                 deep = pos + 1
 
-    def pr_pazzle(self, percent=100):
+
+    def pr_pazzle(self, pazzle):
         i = 0
-        for cell in self.matrix:
+        for cell in pazzle:
             if i % 27 == 0:
                 print '---------------------------'
             if i % 3 == 0:
                 print "|",
-            if random.randint(1, 100) <= percent:
+            if cell.value:
                 print cell.value,
             else:
                 print ' ',
@@ -110,10 +113,20 @@ class SudoKu:
                 print '|'
         print '---------------------------'
 
+    def gen_pazzle(self, matrix=None, percent=40):
+        pazzle = []
+        if not matrix:
+            matrix = self.create_matrix()
+        for cell in matrix:
+            tmp = copy.deepcopy(cell)
+            pazzle.append(tmp)
+            if random.randint(1, 100) <= percent:
+                tmp.reset()
+        return pazzle
+
 
 if __name__ == '__main__':
     sudoku = SudoKu()
-    sudoku.init_matrix()
-    sudoku.pr_pazzle(40)
-    print '\n' * 10
-    sudoku.pr_pazzle(100)
+    sudoku.create_matrix()
+    sudoku.pr_pazzle(sudoku.matrix)
+    sudoku.pr_pazzle(sudoku.gen_pazzle(sudoku.matrix, 40))

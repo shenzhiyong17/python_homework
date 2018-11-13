@@ -7,6 +7,9 @@ import random
 
 from tools.colorFormat import color_format
 from common.timing import timing
+from itertools import islice
+import json
+import os
 
 
 class Node:
@@ -18,7 +21,12 @@ class Node:
         self.neigh = []
 
     def __str__(self):
-        return "%s:%s map:%s" % (self.pos, self.blank, str(self.route_table))
+        pos = {
+            'pos': self.pos,
+            'blank': self.blank,
+            'route_table': self.route_table
+        }
+        return json.dumps(pos)
 
     def __eq__(self, other):
         if other:
@@ -39,13 +47,9 @@ class Node:
         return neighbor
 
     def set_route(self, dst, cost, nexthop):  # 更新map后要广播更新
-        if not dst in self.route_table:
+        if dst not in self.route_table or self.route_table[dst]['cost'] > cost:
             self.route_table[dst] = {'cost': cost, 'nexthop': nexthop}
             self.broadcast(dst, cost)
-        else:
-            if cost < self.route_table[dst]['cost']:
-                self.route_table[dst] = {'cost': cost, 'nexthop': nexthop}
-                self.broadcast(dst, cost)
 
     def update(self, dst, cost, nexthop):  # 收到消息后更新自己的map
         self.set_route(dst, cost + 1, nexthop.pos)
@@ -60,7 +64,7 @@ class Node:
 
 
 class Map:
-    def __init__(self, long, width, per=75):  # 迷宫大小x * y. p为百分比.
+    def __init__(self, long=1, width=1, per=75):  # 迷宫大小x * y. p为百分比.
         self.long = long
         self.width = width
         self.map = {}
@@ -78,7 +82,7 @@ class Map:
     def __getitem__(self, pos):
         return self.map[pos]
 
-    def path(self, src, dst):
+    def path(self, src, dst):  # 收敛后指出两点间路径
         p = self.map[src]
         path = [p]
         while p != self.map[dst]:
@@ -113,6 +117,45 @@ class Map:
             print ''
         print '***************************'
 
+    def save_map(self, map_file):
+        save = open(map_file, 'w')
+        for pos in self.map:
+            res = {
+                'pos': "%s-%s" % (pos[0], pos[1]),
+                'blank': self.map[pos].blank
+            }
+            save.write("%s\n" % json.dumps(res))
+        save.close()
+
+    def load_map(self, map_file):
+        if not os.path.exists(map_file):
+            raise IOError("%s not exist" % map_file)
+        map = open(map_file, 'r')
+        long = 1
+        width = 1
+        self.map = {}
+        for pos_line in islice(map, 0, None):
+            try:
+                js = json.loads(pos_line)
+                x, y = js['pos'].split('-')
+                x = int(x)
+                y = int(y)
+                blank = js['blank']
+                self.map[(x, y)] = Node(x, y, blank, self)
+                if x > long:
+                    long = x
+                if y > width:
+                    width = y
+            except Exception as e:
+                print pos_line
+                raise e
+        map.close()
+        self.long = long
+        self.width = width
+        self.exit = (long - 1, width - 1)
+        self.map[self.entrance].blank = True
+        self.map[self.exit].blank = True
+
     def run(self):
         exit = self.map[self.exit]
         entrance = self.map[self.entrance]
@@ -136,12 +179,20 @@ if __name__ == '__main__':
         cnt += 1
         print cnt
         try:
-            m = Map(25, 80, 60)
+            m = Map(15, 40, 60)
             t1 = timing(m.run)[0]
+            if len(m.path(m.entrance, m.exit)) < (15 + 40) * 1.6:
+                if cnt > 10000:
+                    break
+                continue
             m.printpath(m.entrance, m.exit)
+            m.save_map('/tmp/maze.map')
             print 't1: %s' % t1
             t2 = timing(m.complete_convergence)[0]
             print 't2: %s' % t2
+            m.printpath(m.entrance, m.exit)
+            m.load_map('/tmp/maze.map')
+            t1 = timing(m.run)[0]
             m.printpath(m.entrance, m.exit)
             break
         except RuntimeError:

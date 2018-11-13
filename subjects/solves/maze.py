@@ -16,7 +16,7 @@ class Maze:
         def __init__(self, px, py, blank, maze):
             self.maze = maze
             self.pos = (px, py)
-            self.blank = blank
+            self.blank = blank  # 空或墙
             self.bread = False
             self.neigh = None
 
@@ -41,7 +41,7 @@ class Maze:
             self.neigh = neighbor
             return neighbor
 
-    def __init__(self, sx, sy, per=75):  # 迷宫大小x * y. p为百分比.
+    def __init__(self, sx, sy, per=75):  # 迷宫大小x * y. p为空格百分比.
         # {(x,y)=(v,m)..}    x,y-坐标,v-0为通道1为墙,m-面包屑
         self.map = {}
         for x in range(sx):
@@ -91,13 +91,12 @@ class Maze:
                         d.bread = True
                         n = d
                         break
-            if n != p:
-                # print n,p
+            if n != p:  # 前进了一格
                 path.append(p)
                 p = n
-            elif not path:
+            elif not path:  # 没有路
                 raise RuntimeError('no way')
-            else:
+            else:  # 后退一格
                 p = path.pop(-1)
         path.append(p)
         print '================'
@@ -115,7 +114,6 @@ class Maze:
         return path
 
     def solve_threads(self):
-
         def walk(path):
             if not self.done:
                 threads = []

@@ -23,8 +23,8 @@ class Node:
     def __str__(self):
         pos = {
             'pos': self.pos,
-            'blank': self.blank,
-            'route_table': self.route_table
+            'blank': self.blank
+            # 'route_table': self.route_table
         }
         return json.dumps(pos)
 
@@ -120,11 +120,7 @@ class Map:
     def save_map(self, map_file):
         save = open(map_file, 'w')
         for pos in self.map:
-            res = {
-                'pos': "%s-%s" % (pos[0], pos[1]),
-                'blank': self.map[pos].blank
-            }
-            save.write("%s\n" % json.dumps(res))
+            save.write("%s\n" % self.map[pos])
         save.close()
 
     def load_map(self, map_file):
@@ -137,7 +133,7 @@ class Map:
         for pos_line in islice(map, 0, None):
             try:
                 js = json.loads(pos_line)
-                x, y = js['pos'].split('-')
+                x, y = js['pos']
                 x = int(x)
                 y = int(y)
                 blank = js['blank']

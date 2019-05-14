@@ -90,7 +90,7 @@ class Map:
             path.append(p)
         return path
 
-    def printpath(self, src, dst):
+    def print_path(self, src, dst):
         if dst in self.map[src].route_table:
             path = self.path(src, dst)
         else:
@@ -169,27 +169,38 @@ class Map:
                     node.broadcast()
 
 
-if __name__ == '__main__':
+def gen_and_solve_maze(x=15, y=40, percent_of_blank=60, complicated=1.4, complete_convergence=False):
     cnt = 0
     while True:
         cnt += 1
         print cnt
         try:
-            m = Map(15, 40, 60)
+            m = Map(x, y, percent_of_blank)
             t1 = timing(m.run)[0]
-            if len(m.path(m.entrance, m.exit)) < (15 + 40) * 1.6:
+            if len(m.path(m.entrance, m.exit)) < (x + y) * complicated:  # 迷宫复杂系数
                 if cnt > 10000:
                     break
                 continue
-            m.printpath(m.entrance, m.exit)
-            m.save_map('/tmp/maze.map')
-            print 't1: %s' % t1
-            t2 = timing(m.complete_convergence)[0]
-            print 't2: %s' % t2
-            m.printpath(m.entrance, m.exit)
-            m.load_map('/tmp/maze.map')
-            t1 = timing(m.run)[0]
-            m.printpath(m.entrance, m.exit)
+            m.print_path(m.entrance, m.exit)
+            m.save_map('maze.map')
+            print 't1: %s, path length: %s' % (t1, len(m.path(m.entrance, m.exit)))
+            if complete_convergence:
+                t2 = timing(m.complete_convergence)[0]
+                print 'complete convergence spend: %s' % t2
+                m.print_path(m.entrance, m.exit)
             break
         except RuntimeError:
             continue
+
+
+def load_and_solve(path="maze.map"):
+    m = Map(1, 1, 60)
+    m.load_map(path)
+    t1 = timing(m.run)[0]
+    m.print_path(m.entrance, m.exit)
+    print 't1: %s' % t1
+
+
+if __name__ == '__main__':
+    gen_and_solve_maze()
+    load_and_solve()

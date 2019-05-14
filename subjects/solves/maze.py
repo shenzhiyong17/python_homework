@@ -9,6 +9,9 @@ from tools.colorFormat import color_format
 from common.timing import timing
 import gevent
 import time
+import json
+from itertools import islice
+import os
 
 
 class Maze:
@@ -21,7 +24,11 @@ class Maze:
             self.neigh = None
 
         def __str__(self):
-            return str(self.pos)
+            pos = {
+                'pos': self.pos,
+                'blank': self.blank
+            }
+            return json.dumps(pos)
 
         def __eq__(self, other):
             if other:
@@ -61,7 +68,47 @@ class Maze:
     def __getitem__(self, pos):
         return self.map[pos]
 
-    def printpath(self, path=[]):
+    def save_map(self, map_file):
+        if os.path.exists(map_file):
+            os.remove(map_file)
+        with open(map_file, 'w') as f:
+            for pos in self.map.iterkeys():
+                f.write("%s\n" % self.map[pos])
+
+    def load_map(self, map_file):
+        if not os.path.exists(map_file):
+            raise IOError("%s not exist" % map_file)
+        map = open(map_file, 'r')
+        long = 1
+        width = 1
+        self.map = {}
+        for pos_line in islice(map, 0, None):
+            try:
+                js = json.loads(pos_line)
+                x, y = js['pos']
+                x = int(x)
+                y = int(y)
+                blank = js['blank']
+                self.map[(x, y)] = self.Node(x, y, blank, self)
+                if x > long:
+                    long = x
+                if y > width:
+                    width = y
+            except Exception as e:
+                print pos_line
+                raise e
+        map.close()
+        self.long = long
+        self.width = width
+        self.exit = (long - 1, width - 1)
+        self.map[self.entrance].blank = True
+        self.map[self.exit].blank = True
+
+    def reset(self):
+        for node in self.map.itervalues():
+            node.bread = False
+
+    def print_path(self, path=[]):
         head = '  '
         for y in range(self.width):
             head += ' %2s' % y
@@ -85,11 +132,11 @@ class Maze:
         path = []
         while p.pos != self.exit:
             n = p
-            for d in p.neighbor():
-                if d.blank:
-                    if not d.bread:
-                        d.bread = True
-                        n = d
+            for nei in p.neighbor():
+                if nei.blank:
+                    if not nei.bread:
+                        nei.bread = True
+                        n = nei
                         break
             if n != p:  # 前进了一格
                 path.append(p)
@@ -160,20 +207,56 @@ class Maze:
             raise RuntimeError('no way')
 
 
-if __name__ == '__main__':
+def gen_maze_and_resolve(x=20, y=40, percent_of_blank=60, solve_thread=True, solve_all=False, solve_all_first=True):
     count = 1
-    x = 25
-    y = 80
+
     while True:
         try:
             print count
-            maze = Maze(x, y, 60)
-            t, path = timing(maze.solve_threads)
-            # t, path = timing(maze.solve)
+            maze = Maze(x, y, percent_of_blank)
+            t1, path = timing(maze.solve)
             print 'count: %s' % count
-            maze.printpath(path)
-            print t
+            maze.print_path(path)
+            maze.reset()
+            print "t1: %s" % t1
+
+            if solve_thread:
+                t2, path = timing(maze.solve_threads)
+                maze.print_path(path)
+                maze.reset()
+                print "t2: %s" % t2
+
+            if solve_all:
+                t3, s = timing(maze.solve_all, solve_all_first)
+                maze.print_path(s[0])
+                maze.reset()
+                print "t3: %s" % t3
+
             break
         except RuntimeError:
             count += 1
             continue
+
+
+def load_map_and_resolve(path="maze.map", solve=True, solve_thread=True):
+    maze = Maze(1, 1, 60)
+    maze.load_map(path)
+
+    if solve:
+        t1, path = timing(maze.solve)
+        maze.print_path(path)
+        maze.reset()
+        print "t1: %s, path length: %s" % (t1, len(path))
+
+    if solve_thread:
+        t2, path = timing(maze.solve_threads)
+        maze.print_path(path)
+        maze.reset()
+        print "t2: %s, path length: %s" % (t2, len(path))
+
+
+if __name__ == '__main__':
+    # gen_maze_and_resolve()
+    load_map_and_resolve()
+
+

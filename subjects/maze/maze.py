@@ -3,128 +3,29 @@
 # date: 2017-04-17
 # 迷宫的解
 
-import random
-
-from tools.colorFormat import color_format
 from common.timing import timing
 import gevent
-import time
-import json
-from itertools import islice
-import os
+from subjects.maze.node import Node
+from subjects.maze.absmaze import AbsMaze
 
 
-class Maze:
-    class Node:
-        def __init__(self, px, py, blank, maze):
-            self.maze = maze
-            self.pos = (px, py)
-            self.blank = blank  # 空或墙
-            self.bread = False
-            self.neigh = None
+class MyNode(Node):
+    def __init__(self, px, py, blank, maze):
+        Node.__init__(self, px, py, blank, maze)
+        self.bread = False
 
-        def __str__(self):
-            pos = {
-                'pos': self.pos,
-                'blank': self.blank
-            }
-            return json.dumps(pos)
+    def gen_node(self, px, py, blank, maze):
+        return MyNode(px, py, blank, maze)
 
-        def __eq__(self, other):
-            if other:
-                return self.pos == other.pos
-            return False
 
-        def neighbor(self):
-            if self.neigh is not None:
-                return self.neigh
-            neighbor = []
-            px, py = self.pos
-            for h, r in ((px + 1, py), (px - 1, py), (px, py + 1), (px, py - 1)):
-                pos = (h, r)
-                if h in range(self.maze.long) and r in range(self.maze.width):
-                    if self.maze[pos].blank:
-                        neighbor.append(self.maze[pos])
-            self.neigh = neighbor
-            return neighbor
-
+class Maze(AbsMaze):
     def __init__(self, sx, sy, per=75):  # 迷宫大小x * y. p为空格百分比.
-        # {(x,y)=(v,m)..}    x,y-坐标,v-0为通道1为墙,m-面包屑
-        self.map = {}
-        for x in range(sx):
-            for y in range(sy):
-                if random.randint(0, 100) < per:
-                    self.map[(x, y)] = self.Node(x, y, True, self)
-                else:
-                    self.map[(x, y)] = self.Node(x, y, False, self)
-        self.entrance = (0, 0)
-        self.exit = (sx - 1, sy - 1)
-        self.map[self.entrance].blank = True
-        self.map[self.exit].blank = True
-        self.long = sx
-        self.width = sy
+        AbsMaze.__init__(self, sx, sy, per=per, node_class=MyNode)
         self.done = False
-
-    def __getitem__(self, pos):
-        return self.map[pos]
-
-    def save_map(self, map_file):
-        if os.path.exists(map_file):
-            os.remove(map_file)
-        with open(map_file, 'w') as f:
-            for pos in self.map.iterkeys():
-                f.write("%s\n" % self.map[pos])
-
-    def load_map(self, map_file):
-        if not os.path.exists(map_file):
-            raise IOError("%s not exist" % map_file)
-        map = open(map_file, 'r')
-        long = 1
-        width = 1
-        self.map = {}
-        for pos_line in islice(map, 0, None):
-            try:
-                js = json.loads(pos_line)
-                x, y = js['pos']
-                x = int(x)
-                y = int(y)
-                blank = js['blank']
-                self.map[(x, y)] = self.Node(x, y, blank, self)
-                if x > long:
-                    long = x
-                if y > width:
-                    width = y
-            except Exception as e:
-                print pos_line
-                raise e
-        map.close()
-        self.long = long
-        self.width = width
-        self.exit = (long - 1, width - 1)
-        self.map[self.entrance].blank = True
-        self.map[self.exit].blank = True
 
     def reset(self):
         for node in self.map.itervalues():
             node.bread = False
-
-    def print_path(self, path=[]):
-        head = '  '
-        for y in range(self.width):
-            head += ' %2s' % y
-        print head
-        for x in range(self.long):
-            print '%2s' % x,
-            for y in range(self.width):
-                v = self.map[(x, y)]
-                if v in path:
-                    print color_format(' X', mode='highlight'),
-                elif v.blank:
-                    print '  ',
-                else:
-                    print ' =',
-            print ''
-        print '***************************'
 
     def solve(self):
         # 找出一条路径到达出口,然后简化掉其中环路
@@ -209,7 +110,6 @@ class Maze:
 
 def gen_maze_and_resolve(x=20, y=40, percent_of_blank=60, solve_thread=True, solve_all=False, solve_all_first=True):
     count = 1
-
     while True:
         try:
             print count
@@ -246,17 +146,17 @@ def load_map_and_resolve(path="maze.map", solve=True, solve_thread=True):
         t1, path = timing(maze.solve)
         maze.print_path(path)
         maze.reset()
-        print "t1: %s, path length: %s" % (t1, len(path))
+        print "basic solve: %s, path length: %s" % (t1, len(path))
 
     if solve_thread:
         t2, path = timing(maze.solve_threads)
         maze.print_path(path)
         maze.reset()
-        print "t2: %s, path length: %s" % (t2, len(path))
+        print "threads solve: %s, path length: %s" % (t2, len(path))
 
 
 if __name__ == '__main__':
     # gen_maze_and_resolve()
-    load_map_and_resolve()
+    load_map_and_resolve(solve=True, solve_thread=True)
 
 

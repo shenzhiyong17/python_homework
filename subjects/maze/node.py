@@ -4,6 +4,7 @@
 
 from abc import abstractmethod, ABCMeta
 import json
+import math
 
 
 class Node:
@@ -44,3 +45,8 @@ class Node:
                     neighbor.append(self.maze[pos])
         self.neigh = neighbor
         return neighbor
+
+    def distance(self, dst_pos):
+        px, py = self.pos
+        dis = int(math.fabs(px - dst_pos[0]) + math.fabs(py - dst_pos[1]))
+        return dis

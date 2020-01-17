@@ -5,7 +5,7 @@
 from character import *
 import tools.output_format as Format
 import random
-import dataStructure.common.gen_rand as gen_rand
+import data_structure.common.gen_rand as gen_rand
 
 
 class Rule:
